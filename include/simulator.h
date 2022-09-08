@@ -15,114 +15,117 @@
 
 #include <chrono>
 
-class Simulator {
-    public:
-        enum class SystemType {
-            NsvOptimized,
-            Generic
-        };
+class Simulator
+{
+public:
+    enum class SystemType
+    {
+        NsvOptimized,
+        Generic
+    };
 
-        struct Parameters {
-            SystemType SystemType = SystemType::NsvOptimized;
-        };
+    struct Parameters
+    {
+        SystemType SystemType = SystemType::NsvOptimized;
+    };
 
-    public:
-        Simulator();
-        ~Simulator();
+public:
+    Simulator();
+    ~Simulator();
 
-        void initialize(const Parameters &params);
-        void loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *transmission);
-        void releaseSimulation();
+    void initialize(const Parameters &params);
+    void loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *transmission);
+    void releaseSimulation();
 
-        void startFrame(double dt);
-        bool simulateStep();
-        double getTotalExhaustFlow() const;
-        int readAudioOutput(int samples, int16_t *target);
-        int getFrameIterationCount() const { return i_steps; }
-        void endFrame();
-        void destroy();
+    void startFrame(double dt);
+    bool simulateStep();
+    double getTotalExhaustFlow() const;
+    int readAudioOutput(int samples, int16_t *target);
+    int getFrameIterationCount() const { return i_steps; }
+    void endFrame();
+    void destroy();
 
-        void startAudioRenderingThread();
-        void endAudioRenderingThread();
+    void startAudioRenderingThread();
+    void endAudioRenderingThread();
 
-        double getSynthesizerInputLatency() const { return m_synthesizer.getLatency(); }
-        double getSynthesizerInputLatencyTarget() const;
+    double getSynthesizerInputLatency() const { return m_synthesizer.getLatency(); }
+    double getSynthesizerInputLatencyTarget() const;
 
-        int getCurrentIteration() const { return m_currentIteration; }
+    int getCurrentIteration() const { return m_currentIteration; }
 
-        int i_steps;
+    int i_steps;
 
-        double getAverageProcessingTime() const { return m_physicsProcessingTime; }
+    double getAverageProcessingTime() const { return m_physicsProcessingTime; }
 
-        Engine *getEngine() const { return m_engine; }
-        Transmission *getTransmission() const { return m_transmission; }
-        Vehicle *getVehicle() const { return m_vehicle; }
-        atg_scs::RigidBodySystem *getSystem() { return m_system; }
+    Engine *getEngine() const { return m_engine; }
+    Transmission *getTransmission() const { return m_transmission; }
+    Vehicle *getVehicle() const { return m_vehicle; }
+    atg_scs::RigidBodySystem *getSystem() { return m_system; }
 
-        void setSimulationFrequency(int frequency) { m_simulationFrequency = frequency; }
-        int getSimulationFrequency() const { return m_simulationFrequency; }
+    void setSimulationFrequency(int frequency) { m_simulationFrequency = frequency; }
+    int getSimulationFrequency() const { return m_simulationFrequency; }
 
-        void setFluidSimulationSteps(int steps) { m_fluidSimulationSteps = steps; }
-        int getFluidSimulationSteps() const { return m_fluidSimulationSteps; }
-        int getFluidSimulationFrequency() const { return m_fluidSimulationSteps * m_simulationFrequency; }
+    void setFluidSimulationSteps(int steps) { m_fluidSimulationSteps = steps; }
+    int getFluidSimulationSteps() const { return m_fluidSimulationSteps; }
+    int getFluidSimulationFrequency() const { return m_fluidSimulationSteps * m_simulationFrequency; }
 
-        double getTimestep() const { return 1.0 / m_simulationFrequency; }
+    double getTimestep() const { return 1.0 / m_simulationFrequency; }
 
-        void setTargetSynthesizerLatency(double latency) { m_targetSynthesizerLatency = latency; }
-        double getTargetSynthesizerLatency() const { return m_targetSynthesizerLatency; }
+    void setTargetSynthesizerLatency(double latency) { m_targetSynthesizerLatency = latency; }
+    double getTargetSynthesizerLatency() const { return m_targetSynthesizerLatency; }
 
-        void setSimulationSpeed(double simSpeed) { m_simulationSpeed = simSpeed; }
-        double getSimulationSpeed() const { return m_simulationSpeed; }
+    void setSimulationSpeed(double simSpeed) { m_simulationSpeed = simSpeed; }
+    double getSimulationSpeed() const { return m_simulationSpeed; }
 
-        double getFilteredDynoTorque() const { return m_dynoTorque; }
-        double getDynoPower() const { return (m_engine != nullptr) ? m_dynoTorque * m_engine->getSpeed() : 0; }
-        double getAverageOutputSignal() const;
+    double getFilteredDynoTorque() const { return m_dynoTorque; }
+    double getDynoPower() const { return (m_engine != nullptr) ? m_dynoTorque * m_engine->getSpeed() : 0; }
+    double getAverageOutputSignal() const;
 
-        Synthesizer *getSynthesizer() { return &m_synthesizer; }
+    Synthesizer *getSynthesizer() { return &m_synthesizer; }
 
-        Dynamometer m_dyno;
-        StarterMotor m_starterMotor;
-        DerivativeFilter m_derivativeFilter;
+    Dynamometer m_dyno;
+    StarterMotor m_starterMotor;
+    DerivativeFilter m_derivativeFilter;
 
-    protected:
-        void placeAndInitialize();
-        void placeCylinder(int i);
-        void initializeSynthesizer();
-        
-    protected:
-        void updateFilteredEngineSpeed(double dt);
-        void writeToSynthesizer();
+protected:
+    void placeAndInitialize();
+    void placeCylinder(int i);
+    void initializeSynthesizer();
 
-    protected:
-        atg_scs::RigidBodySystem *m_system;
-        Synthesizer m_synthesizer;
+protected:
+    void updateFilteredEngineSpeed(double dt);
+    void writeToSynthesizer();
 
-        atg_scs::FixedPositionConstraint *m_crankConstraints;
-        atg_scs::ClutchConstraint *m_crankshaftLinks;
-        atg_scs::RotationFrictionConstraint *m_crankshaftFrictionConstraints;
-        atg_scs::LineConstraint *m_cylinderWallConstraints;
-        atg_scs::LinkConstraint *m_linkConstraints;
-        atg_scs::RigidBody m_vehicleMass;
-        VehicleDragConstraint m_vehicleDrag;
+protected:
+    atg_scs::RigidBodySystem *m_system = nullptr;
+    Synthesizer m_synthesizer;
 
-        std::chrono::steady_clock::time_point m_simulationStart;
-        std::chrono::steady_clock::time_point m_simulationEnd;
-        int m_currentIteration;
+    atg_scs::FixedPositionConstraint *m_crankConstraints = nullptr;
+    atg_scs::ClutchConstraint *m_crankshaftLinks = nullptr;
+    atg_scs::RotationFrictionConstraint *m_crankshaftFrictionConstraints = nullptr;
+    atg_scs::LineConstraint *m_cylinderWallConstraints = nullptr;
+    atg_scs::LinkConstraint *m_linkConstraints = nullptr;
+    atg_scs::RigidBody m_vehicleMass;
+    VehicleDragConstraint m_vehicleDrag;
 
-        Engine *m_engine;
-        Transmission *m_transmission;
-        Vehicle *m_vehicle;
+    std::chrono::steady_clock::time_point m_simulationStart;
+    std::chrono::steady_clock::time_point m_simulationEnd;
+    int m_currentIteration;
 
-        double m_physicsProcessingTime;
+    Engine *m_engine = nullptr;
+    Transmission *m_transmission = nullptr;
+    Vehicle *m_vehicle = nullptr;
 
-        int m_simulationFrequency;
-        int m_fluidSimulationSteps;
+    double m_physicsProcessingTime;
 
-        double m_targetSynthesizerLatency;
-        double m_simulationSpeed;
-        double *m_exhaustFlowStagingBuffer;
-        double m_filteredEngineSpeed;
-        double m_dynoTorque;
+    int m_simulationFrequency;
+    int m_fluidSimulationSteps;
+
+    double m_targetSynthesizerLatency;
+    double m_simulationSpeed;
+    double *m_exhaustFlowStagingBuffer = nullptr;
+    double m_filteredEngineSpeed;
+    double m_dynoTorque;
 };
 
 #endif /* ATG_ENGINE_SIM_SIMULATOR_H */
