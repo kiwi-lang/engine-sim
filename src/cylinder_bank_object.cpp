@@ -2,16 +2,20 @@
 
 #include "../include/engine_sim_application.h"
 
-CylinderBankObject::CylinderBankObject() {
+CylinderBankObject::CylinderBankObject()
+{
     m_bank = nullptr;
     m_head = nullptr;
 }
 
-CylinderBankObject::~CylinderBankObject() {
+CylinderBankObject::~CylinderBankObject()
+{
     /* void */
 }
 
-void CylinderBankObject::generateGeometry() {
+#ifdef SIMULATION_RENDERING
+void CylinderBankObject::generateGeometry()
+{
     const double s = m_bank->getBore() / 2.0;
     const double boreSurfaceArea =
         constants::pi * m_bank->getBore() * m_bank->getBore() / 4.0;
@@ -65,24 +69,28 @@ void CylinderBankObject::generateGeometry() {
     gen->endShape(&m_walls);
 }
 
-void CylinderBankObject::render(const ViewParameters *view) {
-    if (view->Sublayer != 0) return;
+void CylinderBankObject::render(const ViewParameters *view)
+{
+    if (view->Sublayer != 0)
+        return;
 
     resetShader();
 
     const ysVector col = ysMath::Add(
         ysMath::Mul(m_app->getForegroundColor(), ysMath::LoadScalar(0.01f)),
-        ysMath::Mul(m_app->getBackgroundColor(), ysMath::LoadScalar(0.99f))
-    );
+        ysMath::Mul(m_app->getBackgroundColor(), ysMath::LoadScalar(0.99f)));
 
     m_app->getShaders()->SetBaseColor(m_app->getPink());
     m_app->drawGenerated(m_walls, 0x0);
 }
+#endif
 
-void CylinderBankObject::process(float dt) {
+void CylinderBankObject::process(float dt)
+{
     /* void */
 }
 
-void CylinderBankObject::destroy() {
+void CylinderBankObject::destroy()
+{
     /* void */
 }

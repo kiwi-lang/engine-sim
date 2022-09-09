@@ -193,6 +193,11 @@ void EngineSimApplication::initialize() {
 #endif /* ATG_ENGINE_DISCORD_ENABLED */
 }
 
+std::ostream& output() {
+    static std::fstream log("log.txt", std::ios::out);
+    return log;
+}
+
 void EngineSimApplication::process(float frame_dt) {
     frame_dt = clamp(frame_dt, 1 / 200.0f, 1 / 30.0f);
 
@@ -229,6 +234,13 @@ void EngineSimApplication::process(float frame_dt) {
     m_simulator.endFrame();
 
     auto duration = proc_t1 - proc_t0;
+
+    static float TotalDt = 0;
+    TotalDt += frame_dt;
+    if (TotalDt > 5) {
+        output() << duration.count() / 1E9 << " ns" << std::endl;
+    }
+
     if (iterationCount > 0) {
         m_performanceCluster->addTimePerTimestepSample(
             (duration.count() / 1E9) / iterationCount);
@@ -299,6 +311,7 @@ void EngineSimApplication::process(float frame_dt) {
 }
 
 void EngineSimApplication::render() {
+#ifdef SIMULATION_RENDERING
     for (SimulationObject *object : m_objects) {
         object->generateGeometry();
     }
@@ -317,6 +330,7 @@ void EngineSimApplication::render() {
     for (SimulationObject *object : m_objects) {
         object->render(&getViewParameters());
     }
+#endif
 
     m_uiManager.render();
 }

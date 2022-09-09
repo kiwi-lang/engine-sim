@@ -6,6 +6,7 @@
 
 #include <cfloat>
 #include <cmath>
+#include <cassert>
 
 class GasSystem {
     public:
