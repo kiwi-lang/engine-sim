@@ -12,26 +12,22 @@ ConvolutionFilter::ConvolutionFilter() {
 }
 
 ConvolutionFilter::~ConvolutionFilter() {
-    assert(m_shiftRegister == nullptr);
-    assert(m_impulseResponse == nullptr);
 }
 
 void ConvolutionFilter::initialize(int samples) {
     m_sampleCount = samples;
     m_shiftOffset = 0;
-    m_shiftRegister = new float[samples];
-    m_impulseResponse = new float[samples];
+    m_shiftRegister.make(samples);
+    m_impulseResponse.make(samples);
 
-    memset(m_shiftRegister, 0, sizeof(float) * samples);
-    memset(m_impulseResponse, 0, sizeof(float) * samples);
+
+    m_shiftRegister.fill(0);
+    m_impulseResponse.fill(0);
 }
 
 void ConvolutionFilter::destroy() {
-    delete[] m_shiftRegister;
-    delete[] m_impulseResponse;
-
-    m_shiftRegister = nullptr;
-    m_impulseResponse = nullptr;
+    m_shiftRegister.destroy();
+    m_impulseResponse.destroy();
 }
 
 float ConvolutionFilter::f(float sample) {

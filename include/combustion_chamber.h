@@ -9,6 +9,9 @@
 #include "units.h"
 #include "fuel.h"
 
+#include "wrapped_pointer.h"
+
+
 class Engine;
 class CombustionChamber : public atg_scs::ForceGenerator {
     public:
@@ -52,8 +55,8 @@ class CombustionChamber : public atg_scs::ForceGenerator {
         void setEngine(Engine *engine) { m_engine = engine; }
         virtual void apply(atg_scs::SystemState *system);
 
-        CylinderHead *getCylinderHead() const { return m_head; }
-        Piston *getPiston() const { return m_piston; }
+        Ptr<CylinderHead> getCylinderHead() const { return m_head; }
+        Ptr < Piston > getPiston() const { return m_piston; }
 
         double getFrictionForce() const;
         double getVolume() const;
@@ -108,16 +111,16 @@ class CombustionChamber : public atg_scs::ForceGenerator {
 
         double m_crankcasePressure;
 
-        double *m_pressure;
-        double *m_pistonSpeed;
+        Ptr<double> m_pressure;
+        Ptr<double> m_pistonSpeed;
         static constexpr int StateSamples = 256;
 
         bool m_litLastFrame;
 
-        Piston *m_piston;
-        CylinderHead *m_head;
-        Engine *m_engine;
-        Fuel *m_fuel;
+        Ptr<Piston> m_piston;
+        Ptr<CylinderHead> m_head;
+        Ptr<Engine> m_engine;
+        Ptr<Fuel> m_fuel;
 };
 
 #endif /* ATG_ENGINE_SIM_COMBUSTION_CHAMBER_H */

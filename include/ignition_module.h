@@ -42,11 +42,11 @@ class IgnitionModule : public Part {
         bool m_enabled;
 
     protected:
-        SparkPlug *getPlug(int i);
+        Ptr<SparkPlug> getPlug(int i);
 
-        Function *m_timingCurve;
-        SparkPlug *m_plugs;
-        Crankshaft *m_crankshaft;
+        Ptr<Function> m_timingCurve;
+        Ptr<SparkPlug> m_plugs;
+        Ptr<Crankshaft> m_crankshaft;
         int m_cylinderCount;
 
         double m_lastCrankshaftAngle;

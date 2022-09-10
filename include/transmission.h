@@ -32,12 +32,12 @@ class Transmission {
     protected:
         atg_scs::ClutchConstraint m_clutchConstraint;
         atg_scs::RigidBody *m_rotatingMass;
-        Vehicle *m_vehicle;
+        Ptr <Vehicle> m_vehicle;
 
         int m_gear;
         int m_newGear;
         int m_gearCount;
-        double *m_gearRatios;
+        Ptr<double> m_gearRatios;
         double m_maxClutchTorque;
         double m_clutchPressure;
 };

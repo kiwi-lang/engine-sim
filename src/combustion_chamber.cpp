@@ -40,8 +40,6 @@ CombustionChamber::CombustionChamber() {
 }
 
 CombustionChamber::~CombustionChamber() {
-    assert(m_pistonSpeed == nullptr);
-    assert(m_pressure == nullptr);
 }
 
 void CombustionChamber::initialize(const Parameters &params) {
@@ -51,8 +49,8 @@ void CombustionChamber::initialize(const Parameters &params) {
     m_crankcasePressure = params.CrankcasePressure;
     m_meanPistonSpeedToTurbulence = params.MeanPistonSpeedToTurbulence;
 
-    m_pistonSpeed = new double[StateSamples];
-    m_pressure = new double[StateSamples];
+    m_pistonSpeed.make(StateSamples);
+    m_pressure.make(StateSamples);
     for (int i = 0; i < StateSamples; ++i) {
         m_pistonSpeed[i] = 0;
         m_pressure[i] = 0;
@@ -109,11 +107,8 @@ void CombustionChamber::initialize(const Parameters &params) {
 }
 
 void CombustionChamber::destroy() {
-    delete[] m_pistonSpeed;
-    delete[] m_pressure;
-
-    m_pistonSpeed = nullptr;
-    m_pressure = nullptr;
+    m_pistonSpeed.destroy();
+    m_pressure.destroy();
 }
 
 double CombustionChamber::getVolume() const {

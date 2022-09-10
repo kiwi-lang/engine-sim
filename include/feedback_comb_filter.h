@@ -15,7 +15,7 @@ class FeedbackCombFilter : public Filter {
         float a_M;
 
     protected:
-        float *m_y;
+        Ptr<float> m_y;
         int m_offset;
 
     protected:

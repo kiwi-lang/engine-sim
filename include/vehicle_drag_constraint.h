@@ -2,6 +2,7 @@
 #define ATG_ENGINE_SIM_VEHICLE_DRAG_CONSTRAINT_H
 
 #include "scs.h"
+#include "wrapped_pointer.h"
 
 class Vehicle;
 class VehicleDragConstraint : public atg_scs::Constraint {
@@ -17,7 +18,7 @@ public:
     double m_kd;
 
 private:
-    Vehicle *m_vehicle;
+    Ptr<Vehicle> m_vehicle;
 };
 
 #endif /* ATG_ENGINE_SIM_VEHICLE_DRAG_CONSTRAINT_H */

@@ -17,16 +17,14 @@ AudioBuffer::~AudioBuffer() {
 void AudioBuffer::initialize(int sampleRate, int bufferSize) {
     m_writePointer = 0;
     m_sampleRate = sampleRate;
-    m_samples = new int16_t[bufferSize];
-    memset(m_samples, 0, sizeof(int16_t) * bufferSize);
+    m_samples.make(bufferSize); 
+    memset(m_samples.get(), 0, sizeof(int16_t) * bufferSize);
     m_bufferSize = bufferSize;
     m_offsetToSeconds = 1 / (double)sampleRate;
 }
 
 void AudioBuffer::destroy() {
-    delete[] m_samples;
-
-    m_samples = nullptr;
+    m_samples.destroy();
     m_bufferSize = 0;
 }
 

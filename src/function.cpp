@@ -17,7 +17,7 @@ Function::Function() {
     m_outputScale = 1.0;
 
     if (DefaultGaussianFilter == nullptr) {
-        DefaultGaussianFilter = new GaussianFilter;
+        DefaultGaussianFilter = defaultGaussianFilter();
         DefaultGaussianFilter->initialize(1.0, 3.0, 1024);
     }
 
@@ -40,29 +40,15 @@ void Function::initialize(int size, double filterRadius, GaussianFilter *filter)
 }
 
 void Function::resize(int newCapacity) {
-    double *new_x = new double[newCapacity];
-    double *new_y = new double[newCapacity];
 
-    if (m_size > 0) {
-        memcpy(new_x, m_x, sizeof(double) * m_size);
-        memcpy(new_y, m_y, sizeof(double) * m_size);
-    }
-
-    delete[] m_x;
-    delete[] m_y;
-
-    m_x = new_x;
-    m_y = new_y;
-
+    m_x.resize(newCapacity);
+    m_y.resize(newCapacity);
     m_capacity = newCapacity;
 }
 
 void Function::destroy() {
-    delete[] m_x;
-    delete[] m_y;
-
-    m_x = nullptr;
-    m_y = nullptr;
+    m_x.destroy();
+    m_y.destroy();
 
     m_capacity = 0;
     m_size = 0;
@@ -93,8 +79,8 @@ void Function::addSample(double x, double y) {
 
     const size_t sizeToCopy = (size_t)m_size - index - 1;
     if (sizeToCopy > 0) {
-        memmove(m_x + index + 1, m_x + index, sizeof(double) * sizeToCopy);
-        memmove(m_y + index + 1, m_y + index, sizeof(double) * sizeToCopy);
+        memmove(m_x.get() + index + 1, m_x.get() + index, sizeof(double) * sizeToCopy);
+        memmove(m_y.get() + index + 1, m_y.get() + index, sizeof(double) * sizeToCopy);
     }
 
     m_x[index] = x;

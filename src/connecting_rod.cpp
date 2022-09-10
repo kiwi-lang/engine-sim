@@ -20,6 +20,7 @@ ConnectingRod::ConnectingRod() {
 
 ConnectingRod::~ConnectingRod() {
     /* void */
+    m_rodJournalAngles.destroy();
 }
 
 void ConnectingRod::initialize(const Parameters &params) {
@@ -31,7 +32,9 @@ void ConnectingRod::initialize(const Parameters &params) {
     m_crankshaft = params.Crankshaft;
     m_piston = params.Piston;
 
-    m_rodJournalAngles = new double[params.RodJournals];
+    if (params.RodJournals > 0) {
+        m_rodJournalAngles.make(params.RodJournals);
+    }
     m_rodJournalCount = params.RodJournals;
     m_slaveThrow = params.SlaveThrow;
     m_master = params.Master;
@@ -71,7 +74,7 @@ void ConnectingRod::getRodJournalPositionGlobal(int i, double *x, double *y) {
 }
 
 int ConnectingRod::getLayer() const {
-    if (m_master != nullptr) {
+    if (m_master) {
         return m_master->getLayer();
     }
     else {

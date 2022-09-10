@@ -6,10 +6,6 @@
 #include <assert.h>
 
 CylinderHead::CylinderHead() {
-    m_exhaustSystems = nullptr;
-    m_intakes = nullptr;
-    m_soundAttenuation = nullptr;
-
     m_flipDisplay = false;
 
     m_bank = nullptr;
@@ -30,9 +26,9 @@ CylinderHead::~CylinderHead() {
 }
 
 void CylinderHead::initialize(const Parameters &params) {
-    m_exhaustSystems = new ExhaustSystem *[params.Bank->getCylinderCount()];
-    m_intakes = new Intake *[params.Bank->getCylinderCount()];
-    m_soundAttenuation = new double[params.Bank->getCylinderCount()];
+    m_exhaustSystems.make(params.Bank->getCylinderCount());
+    m_intakes.make(params.Bank->getCylinderCount());
+    m_soundAttenuation.make(params.Bank->getCylinderCount());
 
     m_bank = params.Bank;
     m_valvetrain = params.Valvetrain;
@@ -55,9 +51,9 @@ void CylinderHead::initialize(const Parameters &params) {
 }
 
 void CylinderHead::destroy() {
-    if (m_exhaustSystems != nullptr) delete[] m_exhaustSystems;
-    if (m_intakes != nullptr) delete[] m_intakes;
-    if (m_soundAttenuation != nullptr) delete[] m_soundAttenuation;
+    m_exhaustSystems.destroy();
+    m_intakes.destroy();
+    m_soundAttenuation.destroy();
 
     m_exhaustSystems = nullptr;
     m_intakes = nullptr;
@@ -106,10 +102,10 @@ void CylinderHead::setIntake(int i, Intake *intake) {
     m_intakes[i] = intake;
 }
 
-Camshaft *CylinderHead::getExhaustCamshaft() {
+Ptr<Camshaft> CylinderHead::getExhaustCamshaft() {
     return m_valvetrain->getActiveExhaustCamshaft();
 }
 
-Camshaft *CylinderHead::getIntakeCamshaft() {
+Ptr<Camshaft> CylinderHead::getIntakeCamshaft() {
     return m_valvetrain->getActiveIntakeCamshaft();
 }

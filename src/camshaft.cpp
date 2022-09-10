@@ -8,21 +8,18 @@
 #include <assert.h>
 
 Camshaft::Camshaft() {
-    m_crankshaft = nullptr;
-    m_lobeAngles = nullptr;
-    m_lobeProfile = nullptr;
     m_lobes = 0;
     m_advance = 0;
     m_baseRadius = 0;
 }
 
 Camshaft::~Camshaft() {
-    assert(m_lobeAngles == nullptr);
+    assert(!m_lobeAngles.valid());
 }
 
 void Camshaft::initialize(const Parameters &params) {
-    m_lobeAngles = new double[params.Lobes];
-    memset(m_lobeAngles, 0, sizeof(double) * params.Lobes);
+    m_lobeAngles.make(params.Lobes);
+    memset(m_lobeAngles.get(), 0, sizeof(double) * params.Lobes);
 
     m_lobes = params.Lobes;
     m_crankshaft = params.Crankshaft;
@@ -31,9 +28,9 @@ void Camshaft::initialize(const Parameters &params) {
     m_baseRadius = params.BaseRadius;
 }
 
-void Camshaft::destroy() {
-    delete[] m_lobeAngles;
-    m_lobeAngles = nullptr;
+void Camshaft::destroy() 
+{
+    m_lobeAngles.destroy();
 
     m_lobes = 0;
 }

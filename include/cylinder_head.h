@@ -55,26 +55,26 @@ class CylinderHead : public Part {
 
         inline bool getFlipDisplay() const { return m_flipDisplay; }
         inline double getCombustionChamberVolume() const { return m_combustionChamberVolume; }
-        inline CylinderBank *getCylinderBank() const { return m_bank; }
+        inline Ptr<CylinderBank> getCylinderBank() const { return m_bank; }
 
         double getIntakeRunnerVolume() const { return m_intakeRunnerVolume; }
         double getIntakeRunnerCrossSectionArea() const { return m_intakeRunnerCrossSectionArea; }
         double getExhaustRunnerVolume() const { return m_exhaustRunnerVolume; }
         double getExhaustRunnerCrossSectionArea() const { return m_exhaustRunnerCrossSectionArea; }
 
-        Camshaft *getExhaustCamshaft();
-        Camshaft *getIntakeCamshaft();
+        Ptr<Camshaft> getExhaustCamshaft();
+        Ptr<Camshaft> getIntakeCamshaft();
 
     protected:
-        ExhaustSystem **m_exhaustSystems;
-        Intake **m_intakes;
-        double *m_soundAttenuation;
+        Ptr<ExhaustSystem *>m_exhaustSystems;
+        Ptr<Intake *>m_intakes;
+        Ptr<double> m_soundAttenuation;
 
-        CylinderBank *m_bank;
-        Valvetrain *m_valvetrain;
+        Ptr<CylinderBank> m_bank;
+        Ptr<Valvetrain> m_valvetrain;
 
-        Function *m_exhaustPortFlow;
-        Function *m_intakePortFlow;
+        Ptr<Function> m_exhaustPortFlow;
+        Ptr<Function> m_intakePortFlow;
 
         double m_intakeRunnerVolume;
         double m_intakeRunnerCrossSectionArea;

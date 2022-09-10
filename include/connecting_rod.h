@@ -49,9 +49,9 @@ class ConnectingRod : public Part {
         inline double getMomentOfInertia() const { return m_I; }
         inline int getJournal() const { return m_journal; }
         int getLayer() const;
-        inline ConnectingRod *getMasterRod() const { return m_master; }
-        inline Crankshaft *getCrankshaft() const { return m_crankshaft; }
-        inline Piston *getPiston() const { return m_piston; }
+        inline Ptr<ConnectingRod> getMasterRod() const { return m_master; }
+        inline Ptr<Crankshaft> getCrankshaft() const { return m_crankshaft; }
+        inline Ptr<Piston>  getPiston() const { return m_piston; }
 
     protected:
         double m_centerOfMass;
@@ -59,12 +59,12 @@ class ConnectingRod : public Part {
         double m_m;
         double m_I;
         int m_journal;
-        ConnectingRod *m_master;
-        Crankshaft *m_crankshaft;
-        Piston *m_piston;
+        Ptr<ConnectingRod> m_master;
+        Ptr<Crankshaft> m_crankshaft;
+        Ptr<Piston> m_piston;
 
         double m_slaveThrow;
-        double *m_rodJournalAngles;
+        WrappedPointer<double> m_rodJournalAngles;
         int m_rodJournalCount;
 };
 

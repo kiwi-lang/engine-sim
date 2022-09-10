@@ -29,9 +29,9 @@ Synthesizer::Synthesizer() {
 }
 
 Synthesizer::~Synthesizer() {
-    assert(m_inputChannels == nullptr);
-    assert(m_thread == nullptr);
-    assert(m_filters == nullptr);
+    assert(!m_inputChannels.valid());
+    assert(!m_thread.valid());
+    assert(!m_filters.valid());
 }
 
 void Synthesizer::initialize(const Parameters &p) {
@@ -49,13 +49,14 @@ void Synthesizer::initialize(const Parameters &p) {
     m_processed = true;
 
     m_audioBuffer.initialize(p.AudioBufferSize);
-    m_inputChannels = new InputChannel[p.InputChannelCount];
+    m_inputChannels.make(p.InputChannelCount);
+
     for (int i = 0; i < p.InputChannelCount; ++i) {
-        m_inputChannels[i].TransferBuffer = new float[p.InputBufferSize];
-        m_inputChannels[i].Data.initialize(p.InputBufferSize);
+        m_inputChannels[i].TransferBuffer.make(p.InputBufferSize);
+        m_inputChannels[i].Data.initialize(p.InputBufferSize); 
     }
 
-    m_filters = new ProcessingFilters[p.InputChannelCount];
+    m_filters.make(p.InputChannelCount);
     for (int i = 0; i < p.InputChannelCount; ++i) {
         m_filters[i].AirNoiseLowPass.setCutoffFrequency(
             m_audioParameters.AirNoiseFrequencyCutoff);
@@ -105,6 +106,7 @@ void Synthesizer::initializeImpulseResponse(
 void Synthesizer::startAudioRenderingThread() {
     m_run = true;
     m_thread = new std::thread(&Synthesizer::audioRenderingThread, this);
+    m_thread.set_owner();
 }
 
 void Synthesizer::endAudioRenderingThread() {
@@ -113,7 +115,7 @@ void Synthesizer::endAudioRenderingThread() {
         endInputBlock();
 
         m_thread->join();
-        delete m_thread;
+        delete m_thread.manual_destroy();
 
         m_thread = nullptr;
     }
@@ -124,14 +126,12 @@ void Synthesizer::destroy() {
 
     for (int i = 0; i < m_inputChannelCount; ++i) {
         m_inputChannels[i].Data.destroy();
+        m_inputChannels[i].TransferBuffer.destroy();
         m_filters[i].Convolution.destroy();
     }
 
-    delete[] m_inputChannels;
-    delete[] m_filters;
-
-    m_inputChannels = nullptr;
-    m_filters = nullptr;
+    m_inputChannels.destroy();
+    m_filters.destroy();
 
     m_inputChannelCount = 0;
 }

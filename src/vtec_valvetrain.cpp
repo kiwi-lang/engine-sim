@@ -46,13 +46,13 @@ double VtecValvetrain::exhaustValveLift(int cylinder) {
         : m_exhaustCamshaft->valveLift(cylinder);
 }
 
-Camshaft *VtecValvetrain::getActiveIntakeCamshaft() {
+Ptr<Camshaft> VtecValvetrain::getActiveIntakeCamshaft() {
     return isVtecEnabled()
         ? m_vtecIntakeCamshaft
         : m_intakeCamshaft;
 }
 
-Camshaft *VtecValvetrain::getActiveExhaustCamshaft() {
+Ptr<Camshaft> VtecValvetrain::getActiveExhaustCamshaft() {
     return isVtecEnabled()
         ? m_vtecExhaustCamshaft
         : m_exhaustCamshaft;

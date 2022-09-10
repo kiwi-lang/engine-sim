@@ -3,6 +3,7 @@
 
 #include "filter.h"
 
+
 class ConvolutionFilter : public Filter {
     public:
         ConvolutionFilter();
@@ -13,13 +14,13 @@ class ConvolutionFilter : public Filter {
         virtual void destroy();
 
         int getSampleCount() const { return m_sampleCount; }
-        float *getImpulseResponse() { return m_impulseResponse; }
+        float *getImpulseResponse() { return m_impulseResponse.get(); }
 
     protected:
-        float *m_shiftRegister;
+        Ptr<float> m_shiftRegister;
         int m_shiftOffset;
 
-        float *m_impulseResponse;
+        Ptr<float> m_impulseResponse;
         int m_sampleCount;
 };
 

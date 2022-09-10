@@ -49,7 +49,9 @@ class Engine : public Part {
 
         std::string getName() const { return m_name; }
 
-        virtual Crankshaft *getOutputCrankshaft() const;
+        virtual Crankshaft const*getOutputCrankshaft() const;
+        virtual Crankshaft* getOutputCrankshaft();
+
         virtual void setSpeedControl(double s);
         virtual double getSpeedControl();
         virtual void setThrottle(double throttle);
@@ -82,15 +84,17 @@ class Engine : public Part {
         int getIntakeCount() const { return m_intakeCount; }
         int getMaxDepth() const;
 
-        Crankshaft *getCrankshaft(int i) const { return &m_crankshafts[i]; }
-        CylinderBank *getCylinderBank(int i) const { return &m_cylinderBanks[i]; }
-        CylinderHead *getHead(int i) const { return &m_heads[i]; }
-        Piston *getPiston(int i) const { return &m_pistons[i]; }
-        ConnectingRod *getConnectingRod(int i) const { return &m_connectingRods[i]; }
+        Crankshaft* getCrankshaft(int i) { return &m_crankshafts[i]; }
+        Crankshaft const* getCrankshaft(int i) const { return &m_crankshafts[i]; }
+
+        CylinderBank *getCylinderBank(int i)  { return &m_cylinderBanks[i]; }
+        CylinderHead *getHead(int i)  { return &m_heads[i]; }
+        Piston *getPiston(int i)  { return &m_pistons[i]; }
+        ConnectingRod *getConnectingRod(int i)  { return &m_connectingRods[i]; }
         IgnitionModule *getIgnitionModule() { return &m_ignitionModule; }
-        ExhaustSystem *getExhaustSystem(int i) const { return &m_exhaustSystems[i]; }
-        Intake *getIntake(int i) const { return &m_intakes[i]; }
-        CombustionChamber *getChamber(int i) const { return &m_combustionChambers[i]; }
+        ExhaustSystem *getExhaustSystem(int i)  { return &m_exhaustSystems[i]; }
+        Intake *getIntake(int i)  { return &m_intakes[i]; }
+        CombustionChamber *getChamber(int i)  { return &m_combustionChambers[i]; }
         Fuel *getFuel() { return &m_fuel; }
 
         double getSimulationFrequency() const { return m_initialSimulationFrequency; }
@@ -101,16 +105,16 @@ class Engine : public Part {
     protected:
         std::string m_name;
 
-        Crankshaft *m_crankshafts;
+        Ptr<Crankshaft> m_crankshafts;
         int m_crankshaftCount;
 
-        CylinderBank *m_cylinderBanks;
-        CylinderHead *m_heads;
+        Ptr<CylinderBank> m_cylinderBanks;
+        Ptr<CylinderHead> m_heads;
         int m_cylinderBankCount;
 
-        Piston *m_pistons;
-        ConnectingRod *m_connectingRods;
-        CombustionChamber *m_combustionChambers;
+        Ptr<Piston> m_pistons;
+        Ptr<ConnectingRod> m_connectingRods;
+        Ptr<CombustionChamber> m_combustionChambers;
         int m_cylinderCount;
 
         double m_starterTorque;
@@ -122,16 +126,16 @@ class Engine : public Part {
         double m_initialNoise;
         double m_initialJitter;
 
-        ExhaustSystem *m_exhaustSystems;
+        Ptr<ExhaustSystem > m_exhaustSystems;
         int m_exhaustSystemCount;
 
-        Intake *m_intakes;
+        Ptr < Intake > m_intakes;
         int m_intakeCount;
 
         IgnitionModule m_ignitionModule;
         Fuel m_fuel;
 
-        Throttle *m_throttle;
+        Ptr < Throttle > m_throttle;
 
         double m_throttleValue;
         double m_displacement;

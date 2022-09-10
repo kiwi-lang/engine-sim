@@ -54,10 +54,10 @@ class Simulator {
 
         double getAverageProcessingTime() const { return m_physicsProcessingTime; }
 
-        Engine *getEngine() const { return m_engine; }
-        Transmission *getTransmission() const { return m_transmission; }
-        Vehicle *getVehicle() const { return m_vehicle; }
-        atg_scs::RigidBodySystem *getSystem() { return m_system; }
+        Ptr < Engine> getEngine() const { return m_engine; }
+        Ptr < Transmission> getTransmission() const { return m_transmission; }
+        Ptr < Vehicle> getVehicle() const { return m_vehicle; }
+        Ptr < atg_scs::RigidBodySystem> getSystem() { return m_system; }
 
         void setSimulationFrequency(int frequency) { m_simulationFrequency = frequency; }
         int getSimulationFrequency() const { return m_simulationFrequency; }
@@ -75,33 +75,34 @@ class Simulator {
         double getSimulationSpeed() const { return m_simulationSpeed; }
 
         double getFilteredDynoTorque() const { return m_dynoTorque; }
-        double getDynoPower() const { return (m_engine != nullptr) ? m_dynoTorque * m_engine->getSpeed() : 0; }
+        double getDynoPower() const { return m_engine ? m_dynoTorque * m_engine->getSpeed() : 0; }
         double getAverageOutputSignal() const;
 
-        Synthesizer *getSynthesizer() { return &m_synthesizer; }
+        Ptr<Synthesizer> getSynthesizer() { return &m_synthesizer; }
 
         Dynamometer m_dyno;
         StarterMotor m_starterMotor;
         DerivativeFilter m_derivativeFilter;
 
+        void initializeSynthesizer(Synthesizer::Parameters synthParams);
+
     protected:
         void placeAndInitialize();
         void placeCylinder(int i);
-        void initializeSynthesizer();
-        
+
     protected:
         void updateFilteredEngineSpeed(double dt);
         void writeToSynthesizer();
 
     protected:
-        atg_scs::RigidBodySystem *m_system;
+        Ptr<atg_scs::RigidBodySystem> m_system;
         Synthesizer m_synthesizer;
 
-        atg_scs::FixedPositionConstraint *m_crankConstraints;
-        atg_scs::ClutchConstraint *m_crankshaftLinks;
-        atg_scs::RotationFrictionConstraint *m_crankshaftFrictionConstraints;
-        atg_scs::LineConstraint *m_cylinderWallConstraints;
-        atg_scs::LinkConstraint *m_linkConstraints;
+        Ptr < atg_scs::FixedPositionConstraint> m_crankConstraints;
+        Ptr < atg_scs::ClutchConstraint> m_crankshaftLinks;
+        Ptr < atg_scs::RotationFrictionConstraint> m_crankshaftFrictionConstraints;
+        Ptr < atg_scs::LineConstraint> m_cylinderWallConstraints;
+        Ptr < atg_scs::LinkConstraint> m_linkConstraints;
         atg_scs::RigidBody m_vehicleMass;
         VehicleDragConstraint m_vehicleDrag;
 
@@ -109,9 +110,9 @@ class Simulator {
         std::chrono::steady_clock::time_point m_simulationEnd;
         int m_currentIteration;
 
-        Engine *m_engine;
-        Transmission *m_transmission;
-        Vehicle *m_vehicle;
+        Ptr < Engine> m_engine;
+        Ptr < Transmission> m_transmission;
+        Ptr < Vehicle> m_vehicle;
 
         double m_physicsProcessingTime;
 
@@ -120,7 +121,7 @@ class Simulator {
 
         double m_targetSynthesizerLatency;
         double m_simulationSpeed;
-        double *m_exhaustFlowStagingBuffer;
+        Ptr<double> m_exhaustFlowStagingBuffer;
         double m_filteredEngineSpeed;
         double m_dynoTorque;
 };

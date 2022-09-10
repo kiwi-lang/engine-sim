@@ -47,10 +47,18 @@ void es_script::Compiler::initialize(std::vector<std::string> &paths)
     m_compiler = new piranha::Compiler(&GetRules());
     m_compiler->setFileExtension(".mr");
 
+    /*
+    m_compiler->addSearchPath("../../es/");
+    m_compiler->addSearchPath("../es/");
+    m_compiler->addSearchPath("es/");
+    */
+
+    //*
     for (auto &path : paths)
     {
         m_compiler->addSearchPath(path.c_str());
     }
+    //*/
 
     GetRules().initialize();
 }

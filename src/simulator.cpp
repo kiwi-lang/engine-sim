@@ -51,21 +51,28 @@ void Simulator::initialize(const Parameters &params)
 {
     if (params.SystemType == SystemType::NsvOptimized)
     {
-        atg_scs::OptimizedNsvRigidBodySystem *system =
-            new atg_scs::OptimizedNsvRigidBodySystem;
+
+        atg_scs::OptimizedNsvRigidBodySystem *system = new atg_scs::OptimizedNsvRigidBodySystem;
         system->initialize(
-            new atg_scs::GaussSeidelSleSolver);
+            new atg_scs::GaussSeidelSleSolver
+            //
+        );
         m_system = system;
     }
     else
     {
-        atg_scs::GenericRigidBodySystem *system =
-            new atg_scs::GenericRigidBodySystem;
+        atg_scs::GenericRigidBodySystem *system = new atg_scs::GenericRigidBodySystem;
+
         system->initialize(
             new atg_scs::GaussianEliminationSleSolver,
-            new atg_scs::NsvOdeSolver);
+            new atg_scs::NsvOdeSolver
+            //
+        );
         m_system = system;
     }
+
+
+    m_system.set_owner();
 }
 
 void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *transmission)
@@ -81,11 +88,14 @@ void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *t
     if (crankCount <= 0)
         return;
 
-    m_crankConstraints = new atg_scs::FixedPositionConstraint[crankCount];
-    m_cylinderWallConstraints = new atg_scs::LineConstraint[cylinderCount];
-    m_linkConstraints = new atg_scs::LinkConstraint[linkCount];
-    m_crankshaftFrictionConstraints = new atg_scs::RotationFrictionConstraint[crankCount];
-    m_crankshaftLinks = new atg_scs::ClutchConstraint[crankCount - 1];
+    m_crankConstraints.make(crankCount);
+    m_cylinderWallConstraints.make(cylinderCount);
+    m_linkConstraints.make(linkCount);
+    m_crankshaftFrictionConstraints.make(crankCount);
+
+    if (crankCount - 1 > 0) {
+        m_crankshaftLinks.make(crankCount - 1);
+    }
 
     const double ks = 5000;
     const double kd = 10;
@@ -169,7 +179,7 @@ void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *t
         m_linkConstraints[i * 2 + 0].m_kd = kd;
 
         double journal_x = 0.0, journal_y = 0.0;
-        if (connectingRod->getMasterRod() == nullptr)
+        if (!connectingRod->getMasterRod().valid())
         {
             Crankshaft *crankshaft = connectingRod->getCrankshaft();
             crankshaft->getRodJournalPositionLocal(
@@ -218,7 +228,7 @@ void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *t
     m_system->addConstraint(&m_starterMotor);
 
     placeAndInitialize();
-    initializeSynthesizer();
+    // initializeSynthesizer();
 }
 
 void Simulator::releaseSimulation()
@@ -277,7 +287,7 @@ void Simulator::placeCylinder(int i)
     CylinderBank *bank = piston->getCylinderBank();
 
     double p_x, p_y;
-    if (rod->getMasterRod() != nullptr)
+    if (rod->getMasterRod().valid())
     {
         rod->getMasterRod()->getRodJournalPositionGlobal(rod->getJournal(), &p_x, &p_y);
     }
@@ -493,25 +503,12 @@ void Simulator::destroy()
     if (m_system != nullptr)
         m_system->reset();
 
-    if (m_crankConstraints != nullptr)
-        delete[] m_crankConstraints;
-    if (m_cylinderWallConstraints != nullptr)
-        delete[] m_cylinderWallConstraints;
-    if (m_linkConstraints != nullptr)
-        delete[] m_linkConstraints;
-    if (m_crankshaftFrictionConstraints != nullptr)
-        delete[] m_crankshaftFrictionConstraints;
-    if (m_exhaustFlowStagingBuffer != nullptr)
-        delete[] m_exhaustFlowStagingBuffer;
-    if (m_system != nullptr)
-        delete m_system;
-
-    m_crankConstraints = nullptr;
-    m_cylinderWallConstraints = nullptr;
-    m_linkConstraints = nullptr;
-    m_crankshaftFrictionConstraints = nullptr;
-    m_exhaustFlowStagingBuffer = nullptr;
-    m_system = nullptr;
+    m_crankConstraints.destroy();
+    m_cylinderWallConstraints.destroy();
+    m_linkConstraints.destroy();
+    m_crankshaftFrictionConstraints.destroy();
+    m_exhaustFlowStagingBuffer.destroy();
+    m_system.destroy();
 
     m_vehicle = nullptr;
     m_transmission = nullptr;
@@ -520,17 +517,13 @@ void Simulator::destroy()
     m_synthesizer.destroy();
 }
 
-void Simulator::initializeSynthesizer()
+void Simulator::initializeSynthesizer(Synthesizer::Parameters synthParams)
 {
-    Synthesizer::Parameters synthParams;
-    synthParams.AudioBufferSize = 44100;
-    synthParams.AudioSampleRate = 44100;
-    synthParams.InputBufferSize = 44100;
     synthParams.InputChannelCount = m_engine->getExhaustSystemCount();
     synthParams.InputSampleRate = static_cast<float>(m_simulationFrequency);
-    m_synthesizer.initialize(synthParams);
 
-    m_exhaustFlowStagingBuffer = new double[m_engine->getExhaustSystemCount()];
+    m_synthesizer.initialize(synthParams);
+    m_exhaustFlowStagingBuffer.make(m_engine->getExhaustSystemCount());
 }
 
 void Simulator::updateFilteredEngineSpeed(double dt)

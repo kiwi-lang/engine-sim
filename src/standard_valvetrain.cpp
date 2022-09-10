@@ -24,10 +24,10 @@ double StandardValvetrain::exhaustValveLift(int cylinder) {
     return m_exhaustCamshaft->valveLift(cylinder);
 }
 
-Camshaft *StandardValvetrain::getActiveIntakeCamshaft() {
+Ptr<Camshaft> StandardValvetrain::getActiveIntakeCamshaft() {
     return m_intakeCamshaft;
 }
 
-Camshaft *StandardValvetrain::getActiveExhaustCamshaft() {
+Ptr<Camshaft> StandardValvetrain::getActiveExhaustCamshaft() {
     return m_exhaustCamshaft;
 }

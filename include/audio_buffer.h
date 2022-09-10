@@ -3,6 +3,8 @@
 
 #include "scs.h"
 
+#include "wrapped_pointer.h"
+
 #include <stdint.h>
 
 class AudioBuffer {
@@ -59,10 +61,10 @@ class AudioBuffer {
 
             if (start == end) return;
             else if (start < end) {
-                memcpy(dest, m_samples + start, length * sizeof(int16_t));
+                memcpy(dest, m_samples.get() + start, length * sizeof(int16_t));
             }
             else {
-                memcpy(dest, m_samples + start, ((size_t)m_bufferSize - start) * sizeof(int16_t));
+                memcpy(dest, m_samples.get() + start, ((size_t)m_bufferSize - start) * sizeof(int16_t));
                 memcpy(dest + m_bufferSize - start, m_samples, end * sizeof(int16_t));
             }
         }
@@ -73,7 +75,7 @@ class AudioBuffer {
 
     protected:
         int m_sampleRate;
-        int16_t *m_samples;
+        WrappedPointer<int16_t> m_samples;
         int m_bufferSize;
 
         double m_offsetToSeconds;

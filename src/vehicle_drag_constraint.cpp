@@ -18,6 +18,7 @@ VehicleDragConstraint::~VehicleDragConstraint() {
 void VehicleDragConstraint::initialize(atg_scs::RigidBody *rotatingMass, Vehicle *vehicle) {
     m_bodies[0] = rotatingMass;
     m_vehicle = vehicle;
+
 }
 
 void VehicleDragConstraint::calculate(Output *output, atg_scs::SystemState *system) {

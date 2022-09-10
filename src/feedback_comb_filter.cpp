@@ -15,7 +15,7 @@ FeedbackCombFilter::~FeedbackCombFilter() {
 
 void FeedbackCombFilter::initialize(int M) {
     this->M = M;
-    m_y = new float[M];
+    m_y.make(M);
     m_offset = 0;
 }
 
@@ -31,7 +31,5 @@ float FeedbackCombFilter::f(float sample) {
 }
 
 void FeedbackCombFilter::destroy() {
-    delete[] m_y;
-
-    m_y = nullptr;
+    m_y.destroy();
 }

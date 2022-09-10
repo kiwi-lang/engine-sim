@@ -63,7 +63,7 @@ class Fuel {
         double m_maxTurbulenceEffect;
         double m_maxDilutionEffect;
 
-        Function *m_turbulenceToFlameSpeedRatio;
+        Ptr<Function> m_turbulenceToFlameSpeedRatio;
 };
 
 #endif /* ATG_ENGINE_FUEL_H */

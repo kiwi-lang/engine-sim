@@ -40,7 +40,7 @@ class Synthesizer {
 
         struct InputChannel {
             RingBuffer<float> Data;
-            float *TransferBuffer = nullptr;
+            Ptr<float> TransferBuffer = nullptr;
             float LastInputSample = 0.0f;
         };
 
@@ -92,7 +92,7 @@ class Synthesizer {
 
     //protected:
         LevelingFilter m_levelingFilter;
-        InputChannel *m_inputChannels;
+        Ptr<InputChannel> m_inputChannels;
         AudioParameters m_audioParameters;
         int m_inputChannelCount;
         int m_inputBufferSize;
@@ -107,7 +107,7 @@ class Synthesizer {
         float m_inputSampleRate;
         float m_audioSampleRate;
 
-        std::thread *m_thread;
+        Ptr < std::thread> m_thread;
         std::atomic<bool> m_run;
         bool m_processed;
 
@@ -115,7 +115,7 @@ class Synthesizer {
         std::mutex m_lock0;
         std::condition_variable m_cv0;
 
-        ProcessingFilters *m_filters;
+        Ptr<ProcessingFilters> m_filters;
 };
 
 #endif /* ATG_ENGINE_SIM_ENGINE_SYNTHESIZER_H */

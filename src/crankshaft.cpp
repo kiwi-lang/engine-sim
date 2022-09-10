@@ -6,7 +6,6 @@
 #include <assert.h>
 
 Crankshaft::Crankshaft() {
-    m_rodJournalAngles = nullptr;
     m_rodJournalCount = 0;
     m_throw = 0.0;
     m_m = 0.0;
@@ -27,7 +26,7 @@ void Crankshaft::initialize(const Parameters &params) {
     m_I = params.MomentOfInertia;
     m_throw = params.CrankThrow;
     m_rodJournalCount = params.RodJournals;
-    m_rodJournalAngles = new double[m_rodJournalCount];
+    m_rodJournalAngles.make(m_rodJournalCount);
     m_p_x = params.Pos_x;
     m_p_y = params.Pos_y;
     m_tdc = params.TDC;
@@ -35,9 +34,7 @@ void Crankshaft::initialize(const Parameters &params) {
 }
 
 void Crankshaft::destroy() {
-    if (m_rodJournalAngles != nullptr) delete[] m_rodJournalAngles;
-
-    m_rodJournalAngles = nullptr;
+    m_rodJournalAngles.destroy();
 }
 
 void Crankshaft::getRodJournalPositionLocal(int i, double *x, double *y) {
