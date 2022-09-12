@@ -71,7 +71,6 @@ void Simulator::initialize(const Parameters &params)
         m_system = system;
     }
 
-
     m_system.set_owner();
 }
 
@@ -93,7 +92,8 @@ void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *t
     m_linkConstraints.make(linkCount);
     m_crankshaftFrictionConstraints.make(crankCount);
 
-    if (crankCount - 1 > 0) {
+    if (crankCount - 1 > 0)
+    {
         m_crankshaftLinks.make(crankCount - 1);
     }
 
@@ -226,6 +226,9 @@ void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *t
     m_starterMotor.m_maxTorque = m_engine->getStarterTorque();
     m_starterMotor.m_rotationSpeed = -m_engine->getStarterSpeed();
     m_system->addConstraint(&m_starterMotor);
+
+    m_motor_break.connectCrankshaft(m_engine->getOutputCrankshaft());
+    m_system->addConstraint(&m_motor_break);
 
     placeAndInitialize();
     // initializeSynthesizer();

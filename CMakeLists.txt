@@ -4,17 +4,17 @@ option(DTV "Enable video output" OFF)
 option(PIRANHA_ENABLED "Enable scripting input" ON)
 option(DISCORD_ENABLED "Enable Discord Rich Presence" ON)
 
-if (DTV)
+if(DTV)
     add_compile_definitions(ATG_ENGINE_SIM_VIDEO_CAPTURE)
-endif (DTV)
+endif(DTV)
 
-if (PIRANHA_ENABLED)
+if(PIRANHA_ENABLED)
     add_compile_definitions(ATG_ENGINE_SIM_PIRANHA_ENABLED)
-endif (PIRANHA_ENABLED)
+endif(PIRANHA_ENABLED)
 
-if (DISCORD_ENABLED)
+if(DISCORD_ENABLED)
     add_compile_definitions(ATG_ENGINE_SIM_DISCORD_ENABLED)
-endif (DISCORD_ENABLED)
+endif(DISCORD_ENABLED)
 
 # Enable group projects in folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -26,7 +26,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 # ========================================================
 # GTEST
-
 include(FetchContent)
 FetchContent_Declare(
     googletest
@@ -43,8 +42,10 @@ set_property(TARGET gtest PROPERTY FOLDER "gtest")
 set_property(TARGET gtest_main PROPERTY FOLDER "gtest")
 
 # ========================================================
-
 add_library(engine-sim STATIC
+    src/motor_break.cpp
+    include/motor_break.h
+
     # Source files
     src/audio_buffer.cpp
     src/camshaft.cpp
@@ -132,15 +133,17 @@ add_library(engine-sim STATIC
 
 target_link_libraries(engine-sim
     simple-2d-constraint-solver
-#    csv-io
-#    delta-basic
+
+    # csv-io
+    # delta-basic
 )
 
 target_include_directories(engine-sim
     PUBLIC dependencies/submodules)
 
-if (PIRANHA_ENABLED)
+if(PIRANHA_ENABLED)
     add_library(engine-sim-script-interpreter STATIC
+
         # Source files
         scripting/src/channel_types.cpp
         scripting/src/compiler.cpp
@@ -177,7 +180,7 @@ if (PIRANHA_ENABLED)
         scripting/include/transmission_node.h
         scripting/include/valvetrain_node.h
         scripting/include/vtec_valvetrain_node.h
-		scripting/include/vehicle_node.h
+        scripting/include/vehicle_node.h
     )
 
     target_include_directories(engine-sim-script-interpreter
@@ -186,10 +189,11 @@ if (PIRANHA_ENABLED)
     target_link_libraries(engine-sim-script-interpreter
         csv-io
         piranha)
-endif (PIRANHA_ENABLED)
+endif(PIRANHA_ENABLED)
 
-if (DISCORD_ENABLED)
+if(DISCORD_ENABLED)
     add_library(discord STATIC
+
         # Source files
         dependencies/discord/Discord.cpp
 
@@ -198,9 +202,10 @@ if (DISCORD_ENABLED)
         dependencies/discord/discord_register.h
         dependencies/discord/discord_rpc.h
     )
-endif (DISCORD_ENABLED)
+endif(DISCORD_ENABLED)
 
 add_executable(engine-sim-app WIN32
+
     # Source files
     src/main.cpp
     src/engine_sim_application.cpp
@@ -275,23 +280,23 @@ target_link_libraries(engine-sim-app
     engine-sim
 )
 
-if (DTV)
+if(DTV)
     target_link_libraries(engine-sim-app
         direct-to-video)
-endif (DTV)
+endif(DTV)
 
-if (PIRANHA_ENABLED)
+if(PIRANHA_ENABLED)
     target_link_libraries(engine-sim-app
         engine-sim-script-interpreter)
-endif (PIRANHA_ENABLED)
+endif(PIRANHA_ENABLED)
 
-if (DISCORD_ENABLED)
+if(DISCORD_ENABLED)
     add_library(discord-rpc STATIC IMPORTED)
     set_property(TARGET discord-rpc PROPERTY IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/dependencies/discord/lib/discord-rpc.lib)
     target_link_libraries(engine-sim-app
-    	discord
-	discord-rpc)
-endif (DISCORD_ENABLED)
+        discord
+        discord-rpc)
+endif(DISCORD_ENABLED)
 
 target_include_directories(engine-sim-app
     PUBLIC dependencies/submodules)
@@ -299,10 +304,10 @@ target_include_directories(engine-sim-app
 add_subdirectory(dependencies)
 
 # GTEST
-
 enable_testing()
 
 add_executable(engine-sim-test
+
     # Source files
     test/gas_system_tests.cpp
     test/function_test.cpp
