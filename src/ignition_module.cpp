@@ -23,15 +23,13 @@ IgnitionModule::~IgnitionModule() {
 }
 
 void IgnitionModule::destroy() {
-    delete[] m_plugs;
-
-    m_plugs = nullptr;
+    m_plugs.destroy();
     m_cylinderCount = 0;
 }
 
 void IgnitionModule::initialize(const Parameters &params) {
     m_cylinderCount = params.cylinderCount;
-    m_plugs = new SparkPlug[m_cylinderCount];
+    m_plugs.make(m_cylinderCount);
     m_crankshaft = params.crankshaft;
     m_timingCurve = params.timingCurve;
     m_revLimit = params.revLimit;
@@ -111,6 +109,6 @@ double IgnitionModule::getTimingAdvance() {
     return m_timingCurve->sampleTriangle(-m_crankshaft->m_body.v_theta);
 }
 
-IgnitionModule::SparkPlug *IgnitionModule::getPlug(int i) {
+Ptr<IgnitionModule::SparkPlug> IgnitionModule::getPlug(int i) {
     return &m_plugs[((i % m_cylinderCount) + m_cylinderCount) % m_cylinderCount];
 }

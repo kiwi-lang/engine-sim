@@ -2,6 +2,8 @@
 #define ATG_ENGINE_SIM_JITTER_FILTER_H
 
 #include "filter.h"
+#include "wrapped_pointer.h"
+#include "low_pass_filter.h"
 
 #include "butterworth_low_pass_filter.h"
 #include "utilities.h"
@@ -55,7 +57,7 @@ protected:
     float m_jitterScale;
     int m_maxJitter;
     int m_offset;
-    float *m_history;
+    Ptr<float> m_history;
 
     std::default_random_engine m_generator;
 };

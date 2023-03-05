@@ -2,6 +2,7 @@
 #define ATG_ENGINE_SIM_VTEC_STANDARD_VALVETRAIN_H
 
 #include "valvetrain.h"
+#include "wrapped_pointer.h"
 
 class Engine;
 class VtecValvetrain : public Valvetrain {
@@ -30,19 +31,19 @@ public:
     virtual double intakeValveLift(int cylinder) override;
     virtual double exhaustValveLift(int cylinder) override;
 
-    virtual Camshaft *getActiveIntakeCamshaft() override;
-    virtual Camshaft *getActiveExhaustCamshaft() override;
+    virtual Ptr<Camshaft> getActiveIntakeCamshaft() override;
+    virtual Ptr<Camshaft> getActiveExhaustCamshaft() override;
 
 private:
     bool isVtecEnabled() const;
 
-    Camshaft *m_intakeCamshaft;
-    Camshaft *m_exhaustCamshaft;
+    Ptr <Camshaft> m_intakeCamshaft;
+    Ptr <Camshaft> m_exhaustCamshaft;
 
-    Camshaft *m_vtecIntakeCamshaft;
-    Camshaft *m_vtecExhaustCamshaft;
+    Ptr <Camshaft> m_vtecIntakeCamshaft;
+    Ptr <Camshaft> m_vtecExhaustCamshaft;
 
-    Engine *m_engine;
+    Ptr <Engine> m_engine;
 
     double m_minRpm;
     double m_minSpeed;

@@ -12,15 +12,6 @@
 Engine::Engine() {
     m_name = "";
 
-    m_crankshafts = nullptr;
-    m_cylinderBanks = nullptr;
-    m_heads = nullptr;
-    m_pistons = nullptr;
-    m_connectingRods = nullptr;
-    m_exhaustSystems = nullptr;
-    m_intakes = nullptr;
-    m_combustionChambers = nullptr;
-
     m_crankshaftCount = 0;
     m_cylinderBankCount = 0;
     m_cylinderCount = 0;
@@ -32,8 +23,6 @@ Engine::Engine() {
     m_dynoMaxSpeed = 0;
     m_dynoHoldStep = 0;
     m_redline = 0;
-
-    m_throttle = nullptr;
     m_throttleValue = 0.0;
 
     m_initialSimulationFrequency = 10000.0;
@@ -43,14 +32,6 @@ Engine::Engine() {
 }
 
 Engine::~Engine() {
-    assert(m_crankshafts == nullptr);
-    assert(m_cylinderBanks == nullptr);
-    assert(m_pistons == nullptr);
-    assert(m_connectingRods == nullptr);
-    assert(m_heads == nullptr);
-    assert(m_exhaustSystems == nullptr);
-    assert(m_intakes == nullptr);
-    assert(m_combustionChambers == nullptr);
 }
 
 void Engine::initialize(const Parameters &params) {
@@ -72,14 +53,14 @@ void Engine::initialize(const Parameters &params) {
     m_initialJitter = params.initialJitter;
     m_initialNoise = params.initialNoise;
 
-    m_crankshafts = new Crankshaft[m_crankshaftCount];
-    m_cylinderBanks = new CylinderBank[m_cylinderBankCount];
-    m_heads = new CylinderHead[m_cylinderBankCount];
-    m_pistons = new Piston[m_cylinderCount];
-    m_connectingRods = new ConnectingRod[m_cylinderCount];
-    m_exhaustSystems = new ExhaustSystem[m_exhaustSystemCount];
-    m_intakes = new Intake[m_intakeCount];
-    m_combustionChambers = new CombustionChamber[m_cylinderCount];
+    m_crankshafts.make(m_crankshaftCount);
+    m_cylinderBanks.make(m_cylinderBankCount);
+    m_heads.make(m_cylinderBankCount);
+    m_pistons.make(m_cylinderCount);
+    m_connectingRods.make(m_cylinderCount);
+    m_exhaustSystems.make(m_exhaustSystemCount);
+    m_intakes.make(m_intakeCount);
+    m_combustionChambers.make(m_cylinderCount);
 
     for (int i = 0; i < m_exhaustSystemCount; ++i) {
         m_exhaustSystems[i].m_index = i;
@@ -111,30 +92,27 @@ void Engine::destroy() {
 
     m_ignitionModule.destroy();
 
-    if (m_throttle != nullptr) delete m_throttle;
-    if (m_crankshafts != nullptr) delete[] m_crankshafts;
-    if (m_cylinderBanks != nullptr) delete[] m_cylinderBanks;
-    if (m_heads != nullptr) delete[] m_heads;
-    if (m_pistons != nullptr) delete[] m_pistons;
-    if (m_connectingRods != nullptr) delete[] m_connectingRods;
-    if (m_exhaustSystems != nullptr) delete[] m_exhaustSystems;
-    if (m_intakes != nullptr) delete[] m_intakes;
-    if (m_combustionChambers != nullptr) delete[] m_combustionChambers;
 
-    m_crankshafts = nullptr;
-    m_cylinderBanks = nullptr;
-    m_pistons = nullptr;
-    m_connectingRods = nullptr;
-    m_heads = nullptr;
-    m_exhaustSystems = nullptr;
-    m_intakes = nullptr;
-    m_combustionChambers = nullptr;
-    m_throttle = nullptr;
+    m_crankshafts.destroy();
+    m_cylinderBanks.destroy();
+    m_pistons.destroy();
+    m_connectingRods.destroy();
+    m_heads.destroy();
+    m_exhaustSystems.destroy();
+    m_intakes.destroy();
+    m_combustionChambers.destroy();
+    m_throttle.destroy();
 }
 
-Crankshaft *Engine::getOutputCrankshaft() const {
+Crankshaft *Engine::getOutputCrankshaft() {
     return &m_crankshafts[0];
 }
+
+
+Crankshaft const* Engine::getOutputCrankshaft() const {
+    return &m_crankshafts[0];
+}
+
 
 void Engine::setSpeedControl(double s) {
     m_throttle->setSpeedControl(s);
@@ -171,7 +149,7 @@ bool placeRod(
     double *s)
 {
     double p_x_0, p_y_0, l_x, l_y, theta_0;
-    if (rod.getMasterRod() != nullptr) {
+    if (rod.getMasterRod().valid()) {
         double s;
         const bool succeeded = placeRod(
             *rod.getMasterRod(),
@@ -179,7 +157,7 @@ bool placeRod(
             *rod.getCrankshaft(),
             crankshaftAngle,
             &p_x_0,
-            &p_y_0,
+            &p_y_0, 
             &theta_0,
             &s);
 
@@ -237,8 +215,8 @@ void Engine::calculateDisplacement() {
     // numerical approximation.
     constexpr int Resolution = 1000;
 
-    double *min_s = new double[m_cylinderCount];
-    double *max_s = new double[m_cylinderCount];
+    std::vector<double> min_s(m_cylinderCount);
+    std::vector<double> max_s(m_cylinderCount);
 
     for (int i = 0; i < m_cylinderCount; ++i) {
         min_s[i] = DBL_MAX;

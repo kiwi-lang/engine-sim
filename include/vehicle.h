@@ -2,6 +2,7 @@
 #define ATG_ENGINE_SIM_VEHICLE_H
 
 #include "scs.h"
+#include "wrapped_pointer.h"
 
 class Vehicle {
     public:
@@ -33,7 +34,7 @@ class Vehicle {
         double linearForceToVirtualTorque(double force) const;
 
     protected:
-        atg_scs::RigidBody *m_rotatingMass;
+        Ptr<atg_scs::RigidBody> m_rotatingMass;
 
         double m_mass;
         double m_dragCoefficient;

@@ -3,6 +3,8 @@
 
 #include "scs.h"
 
+#include "wrapped_pointer.h"
+
 class Part {
     public:
         Part();

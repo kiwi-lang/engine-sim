@@ -4,21 +4,27 @@
 #include "../include/engine_sim_application.h"
 #include "../include/constants.h"
 
-CylinderHeadObject::CylinderHeadObject() {
+CylinderHeadObject::CylinderHeadObject()
+{
     m_head = nullptr;
     m_engine = nullptr;
 }
 
-CylinderHeadObject::~CylinderHeadObject() {
+CylinderHeadObject::~CylinderHeadObject()
+{
     /* void */
 }
 
-void CylinderHeadObject::generateGeometry() {
+#ifdef SIMULATION_RENDERING
+void CylinderHeadObject::generateGeometry()
+{
     /* void */
 }
 
-void CylinderHeadObject::render(const ViewParameters *view) {
-    if (view->Sublayer != 0) return;
+void CylinderHeadObject::render(const ViewParameters *view)
+{
+    if (view->Sublayer != 0)
+        return;
 
     resetShader();
 
@@ -29,7 +35,8 @@ void CylinderHeadObject::render(const ViewParameters *view) {
     const double chamberHeight = m_head->getCombustionChamberVolume() / boreSurfaceArea;
 
     Piston *frontmostPiston = getForemostPiston(bank, view->Layer0);
-    if (frontmostPiston == nullptr) return;
+    if (frontmostPiston == nullptr)
+        return;
 
     const double theta = bank->getAngle();
     double x, y;
@@ -37,18 +44,18 @@ void CylinderHeadObject::render(const ViewParameters *view) {
 
     const ysMatrix scale = ysMath::ScaleTransform(ysMath::LoadScalar((float)s));
     const ysMatrix rotation = ysMath::RotationTransform(
-            ysMath::Constants::ZAxis, (float)theta);
+        ysMath::Constants::ZAxis, (float)theta);
     const ysMatrix translation = ysMath::TranslationTransform(
-            ysMath::LoadVector((float)x, (float)y));
+        ysMath::LoadVector((float)x, (float)y));
     const ysMatrix T_headObject = ysMath::MatMult(translation, rotation);
     const ysMatrix T_head = ysMath::MatMult(
-            T_headObject,
-            scale);
+        T_headObject,
+        scale);
 
-    const ysVector col = m_app->getPink();  ysMath::Add(
+    const ysVector col = m_app->getPink();
+    ysMath::Add(
         ysMath::Mul(m_app->getForegroundColor(), ysMath::LoadScalar(0.01f)),
-        ysMath::Mul(m_app->getBackgroundColor(), ysMath::LoadScalar(0.99f))
-    );
+        ysMath::Mul(m_app->getBackgroundColor(), ysMath::LoadScalar(0.99f)));
     const ysVector moving = m_app->getForegroundColor();
 
     GeometryGenerator::GeometryIndices
@@ -130,20 +137,20 @@ void CylinderHeadObject::render(const ViewParameters *view) {
     m_app->drawGenerated(valveShadow, 0x1);
 
     const double intakeValvePosition = (m_head->getFlipDisplay())
-        ? 0.5f
-        : -0.5f;
+                                           ? 0.5f
+                                           : -0.5f;
 
     const int layer = frontmostPiston->getCylinderIndex();
 
     const float intakeLift = (float)m_head->intakeValveLift(layer);
     const ysMatrix T_intakeValve = ysMath::MatMult(
-            T_head,
-            ysMath::TranslationTransform(
-                ysMath::LoadVector(
-                    (float)intakeValvePosition,
-                    (float)(-intakeLift / s),
-                    0.0f,
-                    0.0f)));
+        T_head,
+        ysMath::TranslationTransform(
+            ysMath::LoadVector(
+                (float)intakeValvePosition,
+                (float)(-intakeLift / s),
+                0.0f,
+                0.0f)));
 
     m_app->getShaders()->SetObjectTransform(T_intakeValve);
     m_app->getShaders()->SetBaseColor(m_app->getBlue());
@@ -199,9 +206,7 @@ void CylinderHeadObject::render(const ViewParameters *view) {
         T_exhaustCam,
         ysMath::RotationTransform(
             ysMath::Constants::ZAxis,
-            (float)(
-                exhaustCam->getAngle()
-                + exhaustCam->getLobeCenterline(layer))));
+            (float)(exhaustCam->getAngle() + exhaustCam->getLobeCenterline(layer))));
 
     m_app->getShaders()->SetObjectTransform(T_exhaustCam);
     m_app->getShaders()->SetBaseColor(m_app->getYellow());
@@ -220,9 +225,7 @@ void CylinderHeadObject::render(const ViewParameters *view) {
         T_intakeCam,
         ysMath::RotationTransform(
             ysMath::Constants::ZAxis,
-            (float)(
-                intakeCam->getAngle()
-                + intakeCam->getLobeCenterline(layer))));
+            (float)(intakeCam->getAngle() + intakeCam->getLobeCenterline(layer))));
 
     m_app->getShaders()->SetObjectTransform(T_intakeCam);
     m_app->getShaders()->SetBaseColor(m_app->getBackgroundColor());
@@ -234,15 +237,19 @@ void CylinderHeadObject::render(const ViewParameters *view) {
     m_app->getShaders()->SetBaseColor(m_app->getBackgroundColor());
     m_app->drawGenerated(camCenter);
 }
+#endif
 
-void CylinderHeadObject::process(float dt) {
+void CylinderHeadObject::process(float dt)
+{
     /* void */
 }
 
-void CylinderHeadObject::destroy() {
+void CylinderHeadObject::destroy()
+{
     /* void */
 }
 
+#ifdef SIMULATION_RENDERING
 void CylinderHeadObject::generateCamshaft(
     Camshaft *camshaft,
     double padding,
@@ -261,3 +268,4 @@ void CylinderHeadObject::generateCamshaft(
     m_app->getGeometryGenerator()->generateCam(params);
     m_app->getGeometryGenerator()->endShape(indices);
 }
+#endif

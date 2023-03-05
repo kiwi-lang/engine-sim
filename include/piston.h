@@ -31,8 +31,8 @@ class Piston : public Part {
         double relativeY() const;
 
         double calculateCylinderWallForce() const;
-        inline ConnectingRod *getRod() const { return m_rod; }
-        inline CylinderBank *getCylinderBank() const { return m_bank; }
+        inline Ptr<ConnectingRod> getRod() const { return m_rod; }
+        inline Ptr<CylinderBank> getCylinderBank() const { return m_bank; }
         inline int getCylinderIndex() const { return m_cylinderIndex; }
         inline double getCompressionHeight() const { return m_compressionHeight; }
         inline double getDisplacement() const { return m_displacement; }
@@ -41,9 +41,9 @@ class Piston : public Part {
         inline double getBlowbyK() const { return m_blowby_k; }
 
     protected:
-        ConnectingRod *m_rod;
-        CylinderBank *m_bank;
-        atg_scs::LineConstraint *m_cylinderConstraint;
+        Ptr<ConnectingRod> m_rod;
+        Ptr<CylinderBank> m_bank;
+        Ptr<atg_scs::LineConstraint> m_cylinderConstraint;
         int m_cylinderIndex;
         double m_compressionHeight;
         double m_displacement;

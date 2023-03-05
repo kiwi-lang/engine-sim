@@ -80,10 +80,10 @@ public:
     Dynamometer m_dyno;
     StarterMotor m_starterMotor;
 
-protected:
+public:
     void initializeSynthesizer();
     virtual void simulateStep_();
-    virtual void writeToSynthesizer() = 0;
+    virtual void writeToSynthesizer() {}
 
     atg_scs::RigidBodySystem *m_system;
 
@@ -117,6 +117,9 @@ private:
     double m_filteredEngineSpeed;
 
     int m_steps;
+
+    public:
+    Ptr<Synthesizer> getSynthesizer() { return &m_synthesizer; }
 };
 
 #endif /* ATG_ENGINE_SIM_SIMULATOR_H */

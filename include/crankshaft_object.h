@@ -11,8 +11,10 @@ class CrankshaftObject : public SimulationObject {
         CrankshaftObject();
         virtual ~CrankshaftObject();
 
+#ifdef SIMULATION_RENDERING
         virtual void generateGeometry();
         virtual void render(const ViewParameters *view);
+#endif
         virtual void process(float dt);
         virtual void destroy();
 

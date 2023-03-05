@@ -4,15 +4,19 @@
 #include "../include/engine_sim_application.h"
 #include "../include/constants.h"
 
-CombustionChamberObject::CombustionChamberObject() {
+CombustionChamberObject::CombustionChamberObject()
+{
     m_chamber = nullptr;
 }
 
-CombustionChamberObject::~CombustionChamberObject() {
+CombustionChamberObject::~CombustionChamberObject()
+{
     /* void */
 }
 
-void CombustionChamberObject::generateGeometry() {
+#ifdef SIMULATION_RENDERING
+void CombustionChamberObject::generateGeometry()
+{
     GeometryGenerator *gen = m_app->getGeometryGenerator();
     CylinderHead *head = m_chamber->getCylinderHead();
     CylinderBank *bank = head->getCylinderBank();
@@ -39,15 +43,18 @@ void CombustionChamberObject::generateGeometry() {
     gen->endShape(&m_indices);
 }
 
-void CombustionChamberObject::render(const ViewParameters *view) {
+void CombustionChamberObject::render(const ViewParameters *view)
+{
     resetShader();
 
     CylinderHead *head = m_chamber->getCylinderHead();
     CylinderBank *bank = head->getCylinderBank();
 
     Piston *frontmostPiston = getForemostPiston(bank, view->Layer0);
-    if (m_chamber->getPiston() == frontmostPiston) {
-        if (m_chamber->m_lit) {
+    if (m_chamber->getPiston() == frontmostPiston)
+    {
+        if (m_chamber->m_lit)
+        {
             m_app->getShaders()->SetBaseColor(
                 ysMath::Mul(
                     m_app->getOrange(),
@@ -56,11 +63,14 @@ void CombustionChamberObject::render(const ViewParameters *view) {
         }
     }
 }
+#endif
 
-void CombustionChamberObject::process(float dt) {
+void CombustionChamberObject::process(float dt)
+{
     /* void */
 }
 
-void CombustionChamberObject::destroy() {
+void CombustionChamberObject::destroy()
+{
     /* void */
 }

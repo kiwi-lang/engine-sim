@@ -12,8 +12,10 @@ class CylinderHeadObject : public SimulationObject {
         CylinderHeadObject();
         virtual ~CylinderHeadObject();
 
+#ifdef SIMULATION_RENDERING
         virtual void generateGeometry();
         virtual void render(const ViewParameters *view);
+#endif
         virtual void process(float dt);
         virtual void destroy();
 

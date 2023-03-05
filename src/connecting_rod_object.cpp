@@ -4,15 +4,19 @@
 #include "../include/units.h"
 #include "../include/ui_utilities.h"
 
-ConnectingRodObject::ConnectingRodObject() {
+ConnectingRodObject::ConnectingRodObject()
+{
     m_connectingRod = nullptr;
 }
 
-ConnectingRodObject::~ConnectingRodObject() {
+ConnectingRodObject::~ConnectingRodObject()
+{
     /* void */
 }
 
-void ConnectingRodObject::generateGeometry() {
+#ifdef SIMULATION_RENDERING
+void ConnectingRodObject::generateGeometry()
+{
     GeometryGenerator *gen = m_app->getGeometryGenerator();
     const int rodJournalCount = m_connectingRod->getRodJournalCount();
 
@@ -25,7 +29,8 @@ void ConnectingRodObject::generateGeometry() {
     gen->startShape();
     gen->generateLine2d(params);
 
-    if (rodJournalCount > 0) {
+    if (rodJournalCount > 0)
+    {
         GeometryGenerator::Circle2dParameters circleParams;
         circleParams.radius = static_cast<float>(m_connectingRod->getSlaveThrow()) * 1.5f;
         circleParams.center_x = 0.0f;
@@ -36,12 +41,14 @@ void ConnectingRodObject::generateGeometry() {
 
     gen->endShape(&m_connectingRodBody);
 
-    if (rodJournalCount > 0) {
+    if (rodJournalCount > 0)
+    {
         gen->startShape();
 
         GeometryGenerator::Circle2dParameters circleParams;
         circleParams.radius = static_cast<float>(m_connectingRod->getCrankshaft()->getThrow()) * 0.2f;
-        for (int i = 0; i < rodJournalCount; ++i) {
+        for (int i = 0; i < rodJournalCount; ++i)
+        {
             double x, y;
             m_connectingRod->getRodJournalPositionLocal(i, &x, &y);
 
@@ -55,12 +62,16 @@ void ConnectingRodObject::generateGeometry() {
     }
 }
 
-void ConnectingRodObject::render(const ViewParameters *view) {
-    if (m_connectingRod->getRodJournalCount() > 0 && view->Sublayer != 1) return;
-    else if (m_connectingRod->getRodJournalCount() == 0 && view->Sublayer != 0) return;
+void ConnectingRodObject::render(const ViewParameters *view)
+{
+    if (m_connectingRod->getRodJournalCount() > 0 && view->Sublayer != 1)
+        return;
+    else if (m_connectingRod->getRodJournalCount() == 0 && view->Sublayer != 0)
+        return;
 
     const int layer = m_connectingRod->getLayer();
-    if (layer > view->Layer1 || layer < view->Layer0) return;
+    if (layer > view->Layer1 || layer < view->Layer0)
+        return;
 
     const ysVector grey0 = mix(m_app->getBackgroundColor(), m_app->getForegroundColor(), 0.9333f);
     const ysVector grey1 = mix(m_app->getBackgroundColor(), m_app->getForegroundColor(), 0.8667f);
@@ -68,8 +79,8 @@ void ConnectingRodObject::render(const ViewParameters *view) {
 
     ysVector color =
         (m_connectingRod->getPiston()->getCylinderBank()->getIndex() % 2 == 0)
-        ? grey0
-        : grey1;
+            ? grey0
+            : grey1;
     color = tintByLayer(color, layer - view->Layer0);
 
     resetShader();
@@ -89,7 +100,8 @@ void ConnectingRodObject::render(const ViewParameters *view) {
     setTransform(&m_connectingRod->m_body);
     m_app->drawGenerated(m_connectingRodBody, 0x32 - layer);
 
-    if (m_connectingRod->getRodJournalCount() > 0) {
+    if (m_connectingRod->getRodJournalCount() > 0)
+    {
         const ysVector shadow =
             tintByLayer(grey2, layer - view->Layer0);
 
@@ -97,11 +109,14 @@ void ConnectingRodObject::render(const ViewParameters *view) {
         m_app->drawGenerated(m_pins, 0x32 - layer);
     }
 }
+#endif
 
-void ConnectingRodObject::process(float dt) {
+void ConnectingRodObject::process(float dt)
+{
     /* void */
 }
 
-void ConnectingRodObject::destroy() {
+void ConnectingRodObject::destroy()
+{
     /* void */
 }

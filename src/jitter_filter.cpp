@@ -9,6 +9,7 @@ JitterFilter::JitterFilter() {
 
 JitterFilter::~JitterFilter() {
     /* void */
+    m_history.destroy();
 }
 
 void JitterFilter::initialize(
@@ -18,9 +19,9 @@ void JitterFilter::initialize(
 {
     m_maxJitter = maxJitter;
 
-    m_history = new float[maxJitter];
+    m_history.make(maxJitter);
     m_offset = 0;
-    memset(m_history, 0, sizeof(float) * maxJitter);
+    m_history.fill(0);
 
     m_noiseFilter.setCutoffFrequency(cutoffFrequency, audioFrequency);
 }

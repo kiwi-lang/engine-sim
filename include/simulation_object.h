@@ -7,38 +7,45 @@
 class Piston;
 class CylinderBank;
 class EngineSimApplication;
-class SimulationObject {
-    public:
-        struct ViewParameters {
-            int Layer0;
-            int Layer1;
-            int Sublayer;
-        };
+class SimulationObject
+{
+public:
+    struct ViewParameters
+    {
+        int Layer0;
+        int Layer1;
+        int Sublayer;
+    };
 
-    public:
-        SimulationObject();
-        virtual ~SimulationObject();
+public:
+    SimulationObject();
+    virtual ~SimulationObject();
 
-        virtual void initialize(EngineSimApplication *app);
-        virtual void generateGeometry();
-        virtual void render(const ViewParameters *settings);
-        virtual void process(float dt);
-        virtual void destroy();
+    virtual void initialize(EngineSimApplication *app);
 
-        Piston *getForemostPiston(CylinderBank *bank, int layer);
+#ifdef SIMULATION_RENDERING
+    virtual void generateGeometry();
+    virtual void render(const ViewParameters *settings);
+#endif
 
-    protected:
-        void resetShader();
-        void setTransform(
-            atg_scs::RigidBody *rigidBody,
-            float scale = 1.0f,
-            float lx = 0.0f,
-            float ly = 0.0f,
-            float theta = 0.0f,
-            float z = 0.0f);
-        ysVector tintByLayer(const ysVector &col, int layers) const;
+    virtual void process(float dt);
+    virtual void destroy();
 
-        EngineSimApplication *m_app;
+    Piston *getForemostPiston(CylinderBank *bank, int layer);
+
+protected:
+#ifdef SIMULATION_RENDERING
+    void resetShader();
+    void setTransform(
+        atg_scs::RigidBody *rigidBody,
+        float scale = 1.0f,
+        float lx = 0.0f,
+        float ly = 0.0f,
+        float theta = 0.0f);
+    ysVector tintByLayer(const ysVector &col, int layers) const;
+#endif
+
+    EngineSimApplication *m_app;
 };
 
 #endif /* ATG_ENGINE_SIM_SIMULATION_OBJECT_H */

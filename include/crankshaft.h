@@ -3,6 +3,7 @@
 
 #include "part.h"
 
+
 class Crankshaft : public Part {
     public:
         struct Parameters {
@@ -44,7 +45,7 @@ class Crankshaft : public Part {
         inline double getFrictionTorque() const { return m_frictionTorque; }
 
     protected:
-        double *m_rodJournalAngles;
+        Ptr<double> m_rodJournalAngles;
         int m_rodJournalCount;
 
         double m_tdc;

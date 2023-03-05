@@ -21,7 +21,7 @@ class GaussianFilter {
         void generateCache();
 
     protected:
-        double *m_cache;
+        Ptr<double> m_cache;
 
         int m_cacheSteps;
         double m_radius;

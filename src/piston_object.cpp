@@ -12,6 +12,7 @@ PistonObject::~PistonObject() {
     /* void */
 }
 
+#ifdef SIMULATION_RENDERING
 void PistonObject::generateGeometry() {
     GeometryGenerator *gen = m_app->getGeometryGenerator();
 
@@ -49,6 +50,7 @@ void PistonObject::render(const ViewParameters *view) {
     m_app->getShaders()->SetBaseColor(holeCol);
     m_app->drawGenerated(m_wristPinHole, 0x32 - layer);
 }
+#endif
 
 void PistonObject::process(float dt) {
     /* void */

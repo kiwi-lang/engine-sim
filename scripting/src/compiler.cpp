@@ -1,74 +1,117 @@
 #include "../include/compiler.h"
 
+#include <iostream>
+
 es_script::Compiler::Output *es_script::Compiler::s_output = nullptr;
 
-es_script::Compiler::Compiler() {
+es_script::Compiler::Compiler()
+{
     m_compiler = nullptr;
 }
 
-es_script::Compiler::~Compiler() {
+es_script::Compiler::~Compiler()
+{
     assert(m_compiler == nullptr);
 }
 
-es_script::Compiler::Output *es_script::Compiler::output() {
-    if (s_output == nullptr) {
+es_script::LanguageRules &GetRules()
+{
+    static es_script::LanguageRules m_rules;
+    return m_rules;
+}
+
+es_script::Compiler::Output *es_script::Compiler::output()
+{
+    if (s_output == nullptr)
+    {
         s_output = new Output;
     }
 
     return s_output;
 }
 
-void es_script::Compiler::initialize() {
-    m_compiler = new piranha::Compiler(&m_rules);
+void es_script::Compiler::initialize()
+{
+    m_compiler = new piranha::Compiler(&GetRules());
     m_compiler->setFileExtension(".mr");
 
     m_compiler->addSearchPath("../../es/");
     m_compiler->addSearchPath("../es/");
     m_compiler->addSearchPath("es/");
 
-    m_rules.initialize();
+    GetRules().initialize();
 }
 
-bool es_script::Compiler::compile(const piranha::IrPath &path) {
+void es_script::Compiler::initialize(std::vector<std::string> &paths)
+{
+    m_compiler = new piranha::Compiler(&GetRules());
+    m_compiler->setFileExtension(".mr");
+
+    /*
+    m_compiler->addSearchPath("../../es/");
+    m_compiler->addSearchPath("../es/");
+    m_compiler->addSearchPath("es/");
+    */
+
+    //*
+    for (auto &path : paths)
+    {
+        m_compiler->addSearchPath(path.c_str());
+    }
+    //*/
+
+    GetRules().initialize();
+}
+
+bool es_script::Compiler::compile(const piranha::IrPath &path)
+{
     bool successful = false;
 
-    std::ofstream file("error_log.log", std::ios::out);
+    // std::ofstream file("error_log.log", std::ios::out);
     piranha::IrCompilationUnit *unit = m_compiler->compile(path);
-    if (unit == nullptr) {
-        file << "Can't find file: " << path.toString() << "\n";
+    if (unit == nullptr)
+    {
+        std::cout << "Can't find file: " << path.toString() << "\n";
     }
-    else {
+    else
+    {
         const piranha::ErrorList *errors = m_compiler->getErrorList();
-        if (errors->getErrorCount() == 0) {
+        if (errors->getErrorCount() == 0)
+        {
             unit->build(&m_program);
 
             m_program.initialize();
 
             successful = true;
         }
-        else {
-            for (int i = 0; i < errors->getErrorCount(); ++i) {
-                printError(errors->getCompilationError(i), file);
+        else
+        {
+            for (int i = 0; i < errors->getErrorCount(); ++i)
+            {
+                printError(errors->getCompilationError(i), std::cout);
             }
         }
     }
 
-    file.close();
+    // file.close();
 
     return successful;
 }
 
-es_script::Compiler::Output es_script::Compiler::execute() {
+es_script::Compiler::Output es_script::Compiler::execute()
+{
     const bool result = m_program.execute();
 
-    if (!result) {
+    if (!result)
+    {
         // Todo: Runtime error
     }
 
     return *output();
 }
 
-void es_script::Compiler::destroy() {
+void es_script::Compiler::destroy()
+{
     m_program.free();
     m_compiler->free();
 
@@ -78,24 +121,26 @@ void es_script::Compiler::destroy() {
 
 void es_script::Compiler::printError(
     const piranha::CompilationError *err,
-    std::ofstream &file) const
+    std::ostream &file) const
 {
     const piranha::ErrorCode_struct &errorCode = err->getErrorCode();
     file << err->getCompilationUnit()->getPath().getStem()
-        << "(" << err->getErrorLocation()->lineStart << "): error "
-        << errorCode.stage << errorCode.code << ": " << errorCode.info << std::endl;
+         << "(" << err->getErrorLocation()->lineStart << "): error "
+         << errorCode.stage << errorCode.code << ": " << errorCode.info << std::endl;
 
     piranha::IrContextTree *context = err->getInstantiation();
-    while (context != nullptr) {
+    while (context != nullptr)
+    {
         piranha::IrNode *instance = context->getContext();
-        if (instance != nullptr) {
+        if (instance != nullptr)
+        {
             const std::string instanceName = instance->getName();
             const std::string definitionName = (instance->getDefinition() != nullptr)
-                ? instance->getDefinition()->getName()
-                : "<Type Error>";
+                                                   ? instance->getDefinition()->getName()
+                                                   : "<Type Error>";
             const std::string formattedName = (instanceName.empty())
-                ? "<unnamed> " + definitionName
-                : instanceName + " " + definitionName;
+                                                  ? "<unnamed> " + definitionName
+                                                  : instanceName + " " + definitionName;
 
             file
                 << "       While instantiating: "

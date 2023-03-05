@@ -7,7 +7,6 @@
 
 CylinderHead::CylinderHead() {
     m_cylinders = nullptr;
-
     m_flipDisplay = false;
 
     m_bank = nullptr;
@@ -28,7 +27,7 @@ CylinderHead::~CylinderHead() {
 }
 
 void CylinderHead::initialize(const Parameters &params) {
-    m_cylinders = new Cylinder[params.Bank->getCylinderCount()];
+    m_cylinders.make(params.Bank->getCylinderCount());
 
     m_bank = params.Bank;
     m_valvetrain = params.Valvetrain;
@@ -44,8 +43,7 @@ void CylinderHead::initialize(const Parameters &params) {
 }
 
 void CylinderHead::destroy() {
-    if (m_cylinders != nullptr) delete[] m_cylinders;
-    m_cylinders = nullptr;
+    m_cylinders.destroy();
 }
 
 double CylinderHead::intakeFlowRate(int cylinder) const {
@@ -100,10 +98,10 @@ void CylinderHead::setHeaderPrimaryLength(int i, double length) {
     m_cylinders[i].headerPrimaryLength = length;
 }
 
-Camshaft *CylinderHead::getExhaustCamshaft() {
+Ptr<Camshaft> CylinderHead::getExhaustCamshaft() {
     return m_valvetrain->getActiveExhaustCamshaft();
 }
 
-Camshaft *CylinderHead::getIntakeCamshaft() {
+Ptr<Camshaft> CylinderHead::getIntakeCamshaft() {
     return m_valvetrain->getActiveIntakeCamshaft();
 }

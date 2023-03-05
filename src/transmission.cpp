@@ -16,9 +16,7 @@ Transmission::Transmission() {
 }
 
 Transmission::~Transmission() {
-    if (m_gearRatios != nullptr) {
-        delete[] m_gearRatios;
-    }
+    m_gearRatios.destroy();
 
     m_gearRatios = nullptr;
 }
@@ -26,7 +24,7 @@ Transmission::~Transmission() {
 void Transmission::initialize(const Parameters &params) {
     m_gearCount = params.GearCount;
     m_maxClutchTorque = params.MaxClutchTorque;
-    m_gearRatios = new double[params.GearCount];
+    m_gearRatios.make(params.GearCount);
     memcpy(m_gearRatios, params.GearRatios, sizeof(double) * m_gearCount);
 }
 

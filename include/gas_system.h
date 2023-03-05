@@ -3,9 +3,11 @@
 
 #include "constants.h"
 #include "units.h"
+#include "wrapped_pointer.h"
 
 #include <cfloat>
 #include <cmath>
+#include <cassert>
 
 class GasSystem {
     public:

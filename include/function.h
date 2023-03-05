@@ -7,6 +7,11 @@ class Function {
     protected:
         static GaussianFilter *DefaultGaussianFilter;
 
+        static GaussianFilter* defaultGaussianFilter() {
+            static GaussianFilter filter;
+            return &filter;
+        }
+
     public:
         Function();
         virtual ~Function();
@@ -30,8 +35,8 @@ class Function {
         void getRange(double *y0, double *y1);
 
     protected:
-        double *m_x;
-        double *m_y;
+        Ptr<double> m_x;
+        Ptr<double> m_y;
 
         double m_yMin;
         double m_yMax;
@@ -43,7 +48,7 @@ class Function {
         int m_capacity;
         int m_size;
 
-        GaussianFilter *m_gaussianFilter;
+        Ptr<GaussianFilter> m_gaussianFilter;
 };
 
 #endif /* ATG_ENGINE_SIM_FUNCTION_H */

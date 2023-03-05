@@ -29,9 +29,9 @@ Synthesizer::Synthesizer() {
 }
 
 Synthesizer::~Synthesizer() {
-    assert(m_inputChannels == nullptr);
-    assert(m_thread == nullptr);
-    assert(m_filters == nullptr);
+    assert(!m_inputChannels.valid());
+    assert(!m_thread.valid());
+    assert(!m_filters.valid());
 }
 
 void Synthesizer::initialize(const Parameters &p) {
@@ -48,17 +48,33 @@ void Synthesizer::initialize(const Parameters &p) {
     m_inputWriteOffset = 0;
     m_processed = true;
 
+#ifdef OLD
     m_audioBuffer.initialize(p.audioBufferSize);
-    m_inputChannels = new InputChannel[p.inputChannelCount];
+    m_inputChannels.make(p.inputChannelCount);
+
+    for (int i = 0; i < p.inputChannelCount; ++i) {
+        m_inputChannels[i].transferBuffer.make(p.inputBufferSize);
+        m_inputChannels[i].data.initialize(p.inputBufferSize); 
+    }
+
+    m_filters.make(p.inputChannelCount);
+    for (int i = 0; i < p.inputChannelCount; ++i) {
+        m_filters[i].airNoiseLowPass.setCutoffFrequency(
+            m_audioParameters.airNoiseFrequencyCutoff);
+        m_filters[i].airNoiseLowPass.m_dt = 1 / m_audioSampleRate;
+#else
+    m_audioBuffer.initialize(p.audioBufferSize);
+    m_inputChannels.make(p.inputChannelCount);
     for (int i = 0; i < p.inputChannelCount; ++i) {
         m_inputChannels[i].transferBuffer = new float[p.inputBufferSize];
         m_inputChannels[i].data.initialize(p.inputBufferSize);
     }
 
-    m_filters = new ProcessingFilters[p.inputChannelCount];
+    m_filters.make(p.inputChannelCount);
     for (int i = 0; i < p.inputChannelCount; ++i) {
         m_filters[i].airNoiseLowPass.setCutoffFrequency(
             m_audioParameters.airNoiseFrequencyCutoff, m_audioSampleRate);
+#endif
 
         m_filters[i].derivative.m_dt = 1 / m_audioSampleRate;
 
@@ -107,6 +123,7 @@ void Synthesizer::initializeImpulseResponse(
 void Synthesizer::startAudioRenderingThread() {
     m_run = true;
     m_thread = new std::thread(&Synthesizer::audioRenderingThread, this);
+    m_thread.set_owner();
 }
 
 void Synthesizer::endAudioRenderingThread() {
@@ -115,7 +132,7 @@ void Synthesizer::endAudioRenderingThread() {
         endInputBlock();
 
         m_thread->join();
-        delete m_thread;
+        delete m_thread.manual_destroy();
 
         m_thread = nullptr;
     }
@@ -129,11 +146,8 @@ void Synthesizer::destroy() {
         m_filters[i].convolution.destroy();
     }
 
-    delete[] m_inputChannels;
-    delete[] m_filters;
-
-    m_inputChannels = nullptr;
-    m_filters = nullptr;
+    m_inputChannels.destroy();
+    m_filters.destroy();
 
     m_inputChannelCount = 0;
 }

@@ -3,8 +3,6 @@
 #include <cmath>
 
 GaussianFilter::GaussianFilter() {
-    m_cache = nullptr;
-
     m_cacheSteps = 0;
     m_radius = 0.0;
     m_alpha = 0.0;
@@ -14,7 +12,7 @@ GaussianFilter::GaussianFilter() {
 }
 
 GaussianFilter::~GaussianFilter() {
-    if (m_cache != nullptr) delete[] m_cache;
+    m_cache.destroy();
 }
 
 void GaussianFilter::initialize(double alpha, double radius, int cacheSteps) {
@@ -51,7 +49,7 @@ void GaussianFilter::generateCache() {
     const int actualSteps = m_cacheSteps - 32;
     const double step = 1.0 / actualSteps;
 
-    m_cache = new double[m_cacheSteps];
+    m_cache.make(m_cacheSteps);
     for (int i = 0; i <= actualSteps; ++i) {
         const double s = i * step * m_radius;
         m_cache[i] = calculate(s);

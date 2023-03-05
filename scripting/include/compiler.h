@@ -8,11 +8,14 @@
 
 #include <vector>
 
-namespace es_script {
+namespace es_script
+{
 
-    class Compiler {
+    class Compiler
+    {
     public:
-        struct Output {
+        struct Output
+        {
             Engine *engine = nullptr;
             Vehicle *vehicle = nullptr;
             Transmission *transmission = nullptr;
@@ -32,15 +35,16 @@ namespace es_script {
         static Output *output();
 
         void initialize();
+        void initialize(std::vector<std::string> &paths);
+
         bool compile(const piranha::IrPath &path);
         Output execute();
         void destroy();
 
     private:
-        void printError(const piranha::CompilationError *err, std::ofstream &file) const;
+        void printError(const piranha::CompilationError *err, std::ostream &file) const;
 
     private:
-        LanguageRules m_rules;
         piranha::Compiler *m_compiler;
         piranha::NodeProgram m_program;
     };
