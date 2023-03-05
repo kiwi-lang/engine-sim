@@ -72,7 +72,7 @@ void CombustionChamber::initialize(const Parameters &params) {
         height,
         1.0,
         0.0);
-   
+
     const double intakeRunnerCrossSection = m_head->getIntakeRunnerCrossSectionArea();
     const double intakeRunnerWidth = std::sqrt(intakeRunnerCrossSection);
     const double manifoldRunnerLength = intake->getRunnerLength();
@@ -91,7 +91,8 @@ void CombustionChamber::initialize(const Parameters &params) {
 
     const double exhaustRunnerCrossSection = m_head->getExhaustRunnerCrossSectionArea();
     const double exhaustRunnerWidth = std::sqrt(exhaustRunnerCrossSection);
-    const double exhaustTubeLength = exhaust->getPrimaryTubeLength();
+    const double exhaustTubeLength =
+        exhaust->getPrimaryTubeLength() + m_head->getHeaderPrimaryLength(m_piston->getCylinderIndex());
     const double exhaustTubeVolume = exhaustRunnerCrossSection * exhaustTubeLength;
     const double totalExhaustRunnerVolume = m_head->getExhaustRunnerVolume() + exhaustTubeVolume;
     const double overallExhaustRunnerLength = totalExhaustRunnerVolume / exhaustRunnerCrossSection;

@@ -55,6 +55,7 @@ add_library(engine-sim STATIC
     src/convolution_filter.cpp
     src/cylinder_bank.cpp
     src/cylinder_head.cpp
+    src/delay_filter.cpp
     src/derivative_filter.cpp
     src/direct_throttle_linkage.cpp
     src/dynamometer.cpp
@@ -75,6 +76,7 @@ add_library(engine-sim STATIC
     src/low_pass_filter.cpp
     src/part.cpp
     src/piston.cpp
+    src/piston_engine_simulator.cpp
     src/simulator.cpp
     src/standard_valvetrain.cpp
     src/starter_motor.cpp
@@ -97,6 +99,7 @@ add_library(engine-sim STATIC
     include/convolution_filter.h
     include/cylinder_bank.h
     include/cylinder_head.h
+    include/delay_filter.h
     include/derivative_filter.h
     include/direct_throttle_linkage.h
     include/dynamometer.h
@@ -117,6 +120,7 @@ add_library(engine-sim STATIC
     include/low_pass_filter.h
     include/part.h
     include/piston.h
+    include/piston_engine_simulator.h
     include/simulator.h
     include/standard_valvetrain.h
     include/starter_motor.h
