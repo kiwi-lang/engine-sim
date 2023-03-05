@@ -71,15 +71,9 @@ public node audi_i5_2_2L {
     wires wires()
 
     engine engine(
-<<<<<<< HEAD
-        name: "Audi 2.3 inline 5",
-        starter_torque: 500 * units.lb_ft,
-        redline: 6000 * units.rpm,
-=======
         name: "Audi 2.2 inline 5",
         starter_torque: 200 * units.lb_ft,
         redline: 7500 * units.rpm,
->>>>>>> 85f7c3b959a908ed5232ede4f1a4ac7eafe6b630
         fuel: fuel(
             max_turbulence_effect: 4.0,
             burning_efficiency_randomness: 0.2,
@@ -135,11 +129,7 @@ public node audi_i5_2_2L {
         plenum_cross_section_area: 10.0 * units.cm2,
         intake_flow_rate: k_carb(500.0),
         idle_flow_rate: k_carb(0.0),
-<<<<<<< HEAD
-        idle_throttle_plate_position: 0.93
-=======
         idle_throttle_plate_position: 0.995
->>>>>>> 85f7c3b959a908ed5232ede4f1a4ac7eafe6b630
     )
 
     exhaust_system_parameters es_params(

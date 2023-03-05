@@ -66,36 +66,36 @@ double CylinderHead::exhaustValveLift(int cylinder) const {
 
 void CylinderHead::setAllExhaustSystems(ExhaustSystem *system) {
     for (int i = 0; i < m_bank->getCylinderCount(); ++i) {
-        m_cylinders[i]->exhaustSystem = system;
+        m_cylinders[i].exhaustSystem = system;
     }
 }
 
 void CylinderHead::setExhaustSystem(int i, ExhaustSystem *system) {
-    m_cylinders[i]->exhaustSystem = system;
+    m_cylinders[i].exhaustSystem = system;
 }
 
 void CylinderHead::setSoundAttenuation(int i, double soundAttenuation) {
-    m_cylinders[i]->soundAttenuation = soundAttenuation;
+    m_cylinders[i].soundAttenuation = soundAttenuation;
 }
 
 void CylinderHead::setAllIntakes(Intake *intake) {
     for (int i = 0; i < m_bank->getCylinderCount(); ++i) {
-        m_cylinders[i]->intake = intake;
+        m_cylinders[i].intake = intake;
     }
 }
 
 void CylinderHead::setIntake(int i, Intake *intake) {
-    m_cylinders[i]->intake = intake;
+    m_cylinders[i].intake = intake;
 }
 
 void CylinderHead::setAllHeaderPrimaryLengths(double length) {
     for (int i = 0; i < m_bank->getCylinderCount(); ++i) {
-        m_cylinders[i]->headerPrimaryLength = length;
+        m_cylinders[i].headerPrimaryLength = length;
     }
 }
 
 void CylinderHead::setHeaderPrimaryLength(int i, double length) {
-    m_cylinders[i]->headerPrimaryLength = length;
+    m_cylinders[i].headerPrimaryLength = length;
 }
 
 Ptr<Camshaft> CylinderHead::getExhaustCamshaft() {

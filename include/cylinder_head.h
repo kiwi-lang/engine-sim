@@ -50,18 +50,18 @@ class CylinderHead : public Part {
         double intakeValveLift(int cylinder) const;
         double exhaustValveLift(int cylinder) const;
 
-        inline ExhaustSystem *getExhaustSystem(int cylinderIndex) const { return m_cylinders[cylinderIndex]->exhaustSystem; }
+        inline ExhaustSystem *getExhaustSystem(int cylinderIndex) const { return m_cylinders[cylinderIndex].exhaustSystem; }
         void setAllExhaustSystems(ExhaustSystem *system);
         void setExhaustSystem(int i, ExhaustSystem *system);
 
-        inline double getSoundAttenuation(int cylinderIndex) const { return m_cylinders[cylinderIndex]->soundAttenuation; }
+        inline double getSoundAttenuation(int cylinderIndex) const { return m_cylinders[cylinderIndex].soundAttenuation; }
         void setSoundAttenuation(int i, double soundAttenuation);
 
-        inline Intake *getIntake(int cylinderIndex) const { return m_cylinders[cylinderIndex]->intake; }
+        inline Intake *getIntake(int cylinderIndex) const { return m_cylinders[cylinderIndex].intake; }
         void setAllIntakes(Intake *intake);
         void setIntake(int i, Intake *intake);
 
-        inline double getHeaderPrimaryLength(int cylinderIndex) const { return m_cylinders[cylinderIndex]->headerPrimaryLength; }
+        inline double getHeaderPrimaryLength(int cylinderIndex) const { return m_cylinders[cylinderIndex].headerPrimaryLength; }
         void setAllHeaderPrimaryLengths(double length);
         void setHeaderPrimaryLength(int i, double length);
 
@@ -78,7 +78,7 @@ class CylinderHead : public Part {
         Ptr<Camshaft> getIntakeCamshaft();
 
     protected:
-        Ptr<Cylinder> *m_cylinders;
+        Ptr<Cylinder> m_cylinders;
         Ptr<CylinderBank> m_bank;
         Ptr<Valvetrain> m_valvetrain;
 
