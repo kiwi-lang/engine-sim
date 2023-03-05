@@ -31,7 +31,7 @@ class Transmission {
 
     protected:
         atg_scs::ClutchConstraint m_clutchConstraint;
-        atg_scs::RigidBody *m_rotatingMass;
+        Ptr<atg_scs::RigidBody> m_rotatingMass;
         Ptr <Vehicle> m_vehicle;
 
         int m_gear;

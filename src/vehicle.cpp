@@ -35,9 +35,12 @@ void Vehicle::addToSystem(atg_scs::RigidBodySystem *system, atg_scs::RigidBody *
 }
 
 double Vehicle::getSpeed() const {
-    const double E_r = 0.5 * m_rotatingMass->I * m_rotatingMass->v_theta * m_rotatingMass->v_theta;
-    const double vehicleSpeed = std::sqrt(2 * E_r / m_mass);
+    double vehicleSpeed = 0;
 
+    if (m_rotatingMass) {
+        const double E_r = 0.5 * m_rotatingMass->I * m_rotatingMass->v_theta * m_rotatingMass->v_theta;
+        vehicleSpeed = std::sqrt(2 * E_r / m_mass);
+    }
     return vehicleSpeed;
 
     // E_r = 0.5 * I * v_theta^2

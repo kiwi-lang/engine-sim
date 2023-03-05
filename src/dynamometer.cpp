@@ -44,7 +44,7 @@ void Dynamometer::calculate(Output *output, atg_scs::SystemState *state) {
     else {
         output->v_bias[0] = -m_rotationSpeed;
         output->limits[0][0] = m_enabled ? -m_maxTorque : 0.0;
-        output->limits[0][1] = (m_hold || m_enabled) ? m_maxTorque : 0.0;
+        output->limits[0][1] = (m_hold && m_enabled) ? m_maxTorque : 0.0;
     }
 }
 
