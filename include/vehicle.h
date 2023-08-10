@@ -33,7 +33,7 @@ class Vehicle {
         inline void resetTravelledDistance() { m_travelledDistance = 0; }
         double linearForceToVirtualTorque(double force) const;
 
-    protected:
+    public:
         Ptr<atg_scs::RigidBody> m_rotatingMass;
 
         double m_mass;

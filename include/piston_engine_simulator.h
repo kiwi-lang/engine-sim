@@ -47,7 +47,7 @@ class PistonEngineSimulator : public Simulator {
     protected:
         virtual void writeToSynthesizer() override;
 
-    protected:
+    public:
         DelayFilter *m_delayFilters;
 
         atg_scs::FixedPositionConstraint *m_crankConstraints;

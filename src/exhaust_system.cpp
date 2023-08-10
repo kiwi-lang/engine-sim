@@ -55,8 +55,8 @@ void ExhaustSystem::initialize(const Parameters &params) {
 
 void ExhaustSystem::destroy() {
     /* void */
-}
-
+} 
+ 
 void ExhaustSystem::process(double dt) {
     GasSystem::Mix airMix;
     airMix.p_fuel = 0;

@@ -10,6 +10,7 @@
 #include "derivative_filter.h"
 #include "vehicle_drag_constraint.h"
 #include "delay_filter.h"
+#include "brake.h"
 #include "engine.h"
 
 #include <chrono>
@@ -77,6 +78,7 @@ public:
 
     double filteredEngineSpeed() const { return m_filteredEngineSpeed; }
 
+    Brake m_brake;
     Dynamometer m_dyno;
     StarterMotor m_starterMotor;
 
