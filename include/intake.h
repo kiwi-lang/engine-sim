@@ -58,7 +58,7 @@ class Intake : public Part {
         double m_flowRate;
         double m_totalFuelInjected;
 
-    protected:
+    public:
         double m_crossSectionArea;
         double m_inputFlowK;
         double m_idleFlowK;

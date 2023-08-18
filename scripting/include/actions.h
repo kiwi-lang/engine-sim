@@ -84,7 +84,7 @@ namespace es_script {
             m_rod->addRodJournal(m_rodJournal);
         }
 
-    protected:
+    public:
         ConnectingRodNode *m_rod = nullptr;
         RodJournalNode *m_rodJournal = nullptr;
     };

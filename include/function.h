@@ -34,7 +34,7 @@ class Function {
         void getDomain(double *x0, double *x1);
         void getRange(double *y0, double *y1);
 
-    protected:
+    public:
         Ptr<double> m_x;
         Ptr<double> m_y;
 

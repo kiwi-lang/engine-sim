@@ -38,6 +38,8 @@ namespace es_script
         void initialize(std::vector<std::string> &paths);
 
         bool compile(const piranha::IrPath &path);
+        bool compile_script(std::string const& script, const piranha::IrPath &root);
+
         Output execute();
         void destroy();
 

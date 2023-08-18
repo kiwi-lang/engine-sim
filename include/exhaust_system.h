@@ -42,7 +42,7 @@ class ExhaustSystem : public Part {
 
         inline Ptr<GasSystem> getSystem() { return &m_system; }
 
-    protected:
+    public:
         GasSystem m_atmosphere;
         GasSystem m_system;
 

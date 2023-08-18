@@ -20,7 +20,7 @@ class GaussianFilter {
         double calculate(double s) const;
         void generateCache();
 
-    protected:
+    public:
         Ptr<double> m_cache;
 
         int m_cacheSteps;

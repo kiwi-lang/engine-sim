@@ -34,7 +34,7 @@ public:
     virtual Ptr<Camshaft> getActiveIntakeCamshaft() override;
     virtual Ptr<Camshaft> getActiveExhaustCamshaft() override;
 
-private:
+public:
     bool isVtecEnabled() const;
 
     Ptr <Camshaft> m_intakeCamshaft;

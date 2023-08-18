@@ -23,7 +23,7 @@ public:
     virtual Ptr<Camshaft> getActiveIntakeCamshaft() override;
     virtual Ptr<Camshaft> getActiveExhaustCamshaft() override;
 
-private:
+public:
     Ptr<Camshaft> m_intakeCamshaft;
     Ptr<Camshaft> m_exhaustCamshaft;
 };

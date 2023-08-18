@@ -51,7 +51,7 @@ class Fuel {
 
         double getMolecularAfr() const { return m_molecularAfr; }
 
-    protected:
+    public:
         std::string m_name;
         double m_molecularMass;
         double m_energyDensity;

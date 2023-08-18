@@ -40,7 +40,7 @@ class Piston : public Part {
         inline double getMass() const { return m_mass; }
         inline double getBlowbyK() const { return m_blowby_k; }
 
-    protected:
+    public:
         Ptr<ConnectingRod> m_rod;
         Ptr<CylinderBank> m_bank;
         Ptr<atg_scs::LineConstraint> m_cylinderConstraint;

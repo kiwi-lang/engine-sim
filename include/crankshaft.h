@@ -44,7 +44,7 @@ class Crankshaft : public Part {
         inline double getPosY() const { return m_p_y; }
         inline double getFrictionTorque() const { return m_frictionTorque; }
 
-    protected:
+    public:
         Ptr<double> m_rodJournalAngles;
         int m_rodJournalCount;
 

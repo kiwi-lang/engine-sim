@@ -9,6 +9,8 @@
 #undef min
 #undef max
 
+#define RANDOM_MAGIC_NUMBER 2048
+
 Synthesizer::Synthesizer() {
     m_inputChannels = nullptr;
     m_inputChannelCount = 0;
@@ -66,7 +68,7 @@ void Synthesizer::initialize(const Parameters &p) {
     m_audioBuffer.initialize(p.audioBufferSize);
     m_inputChannels.make(p.inputChannelCount);
     for (int i = 0; i < p.inputChannelCount; ++i) {
-        m_inputChannels[i].transferBuffer = new float[p.inputBufferSize];
+        m_inputChannels[i].transferBuffer.make(p.inputBufferSize);
         m_inputChannels[i].data.initialize(p.inputBufferSize);
     }
 
@@ -239,12 +241,12 @@ void Synthesizer::renderAudio() {
     m_cv0.wait(lk0, [this] {
         const bool inputAvailable =
             m_inputChannels[0].data.size() > 0
-            && m_audioBuffer.size() < 2000;
+            && m_audioBuffer.size() < RANDOM_MAGIC_NUMBER;
         return !m_run || (inputAvailable && !m_processed);
     });
 
     const int n = std::min(
-        std::max(0, 2000 - (int)m_audioBuffer.size()),
+        std::max(0, RANDOM_MAGIC_NUMBER - (int)m_audioBuffer.size()),
         (int)m_inputChannels[0].data.size());
 
     for (int i = 0; i < m_inputChannelCount; ++i) {

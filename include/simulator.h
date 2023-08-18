@@ -92,7 +92,7 @@ public:
 private:
     void updateFilteredEngineSpeed(double dt);
 
-private:
+public:
     atg_scs::RigidBody m_vehicleMass;
     VehicleDragConstraint m_vehicleDrag;
 

@@ -41,7 +41,7 @@ class CylinderBank {
         inline double getY() const { return m_y; }
         inline double getDisplayDepth() const { return m_displayDepth; }
 
-    protected:
+    public:
         double m_angle;
         double m_bore;
         double m_deckHeight;

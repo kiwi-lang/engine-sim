@@ -29,7 +29,7 @@ class Transmission {
         inline void setClutchPressure(double pressure) { m_clutchPressure = pressure; }
         inline double getClutchPressure() const { return m_clutchPressure; }
 
-    protected:
+    public:
         atg_scs::ClutchConstraint m_clutchConstraint;
         Ptr<atg_scs::RigidBody> m_rotatingMass;
         Ptr <Vehicle> m_vehicle;

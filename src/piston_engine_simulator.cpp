@@ -135,7 +135,7 @@ void PistonEngineSimulator::loadSimulation(Engine *engine, Vehicle *vehicle, Tra
         m_linkConstraints[i * 2 + 0].m_kd = kd;
 
         double journal_x = 0.0, journal_y = 0.0;
-        if (connectingRod->getMasterRod() == nullptr) {
+        if (is_null(connectingRod->getMasterRod())) {
             Crankshaft *crankshaft = connectingRod->getCrankshaft();
             crankshaft->getRodJournalPositionLocal(
                 connectingRod->getJournal(),
@@ -186,6 +186,8 @@ void PistonEngineSimulator::loadSimulation(Engine *engine, Vehicle *vehicle, Tra
     m_system->addConstraint(&m_starterMotor);
 
     placeAndInitialize();
+
+    // initializeSynthesizer ONCE
     initializeSynthesizer();
 }
 
@@ -241,11 +243,13 @@ void PistonEngineSimulator::placeCylinder(int i) {
     CylinderBank *bank = piston->getCylinderBank();
 
     double p_x, p_y;
-    if (rod->getMasterRod() != nullptr) {
+    if (!is_null(rod->getMasterRod())) {
         rod->getMasterRod()->getRodJournalPositionGlobal(rod->getJournal(), &p_x, &p_y);
     }
     else {
-        rod->getCrankshaft()->getRodJournalPositionGlobal(rod->getJournal(), &p_x, &p_y);
+        Crankshaft* crankshaft = rod->getCrankshaft();
+        int index = rod->getJournal();
+        crankshaft->getRodJournalPositionGlobal(index, &p_x, &p_y);
     }
 
     // (bank->m_x + bank->m_dx * s - p_x)^2 + (bank->m_y + bank->m_dy * s - p_y)^2 = (rod->m_length)^2

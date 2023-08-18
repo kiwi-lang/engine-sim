@@ -53,7 +53,7 @@ class ConnectingRod : public Part {
         inline Ptr<Crankshaft> getCrankshaft() const { return m_crankshaft; }
         inline Ptr<Piston>  getPiston() const { return m_piston; }
 
-    protected:
+    public:
         double m_centerOfMass;
         double m_length;
         double m_m;

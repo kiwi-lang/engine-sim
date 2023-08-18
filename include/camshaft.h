@@ -45,7 +45,7 @@ class Camshaft : public Part {
         double getAdvance() const { return m_advance; }
         double getBaseRadius() const { return m_baseRadius; }
 
-    private:
+    public:
         Ptr<Crankshaft> m_crankshaft;
         Ptr<Function> m_lobeProfile;
         WrappedPointer<double> m_lobeAngles;

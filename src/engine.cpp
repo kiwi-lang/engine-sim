@@ -56,12 +56,15 @@ void Engine::initialize(const Parameters &params) {
     m_crankshafts.make(m_crankshaftCount);
     m_cylinderBanks.make(m_cylinderBankCount);
     m_heads.make(m_cylinderBankCount);
-    m_pistons.make(m_cylinderCount);
-    m_connectingRods.make(m_cylinderCount);
+
+    // m_pistons.make(m_cylinderCount);
+    m_pistons.resize(m_cylinderCount);
+    m_connectingRods.resize(m_cylinderCount);
+    m_combustionChambers.resize(m_cylinderCount);
+
     m_exhaustSystems.make(m_exhaustSystemCount);
     m_intakes.make(m_intakeCount);
-    m_combustionChambers.make(m_cylinderCount);
-
+    
     for (int i = 0; i < m_exhaustSystemCount; ++i) {
         m_exhaustSystems[i].m_index = i;
     }
@@ -77,9 +80,9 @@ void Engine::destroy() {
     }
 
     for (int i = 0; i < m_cylinderCount; ++i) {
-        m_pistons[i].destroy();
-        m_connectingRods[i].destroy();
-        m_combustionChambers[i].destroy();
+        // m_pistons[i].destroy();
+        //m_connectingRods[i].destroy();
+        //m_combustionChambers[i].destroy();
     }
 
     for (int i = 0; i < m_exhaustSystemCount; ++i) {
@@ -95,12 +98,12 @@ void Engine::destroy() {
 
     m_crankshafts.destroy();
     m_cylinderBanks.destroy();
-    m_pistons.destroy();
-    m_connectingRods.destroy();
+    // m_pistons.destroy();
+    // m_connectingRods.destroy();
+    // m_combustionChambers.destroy();
     m_heads.destroy();
     m_exhaustSystems.destroy();
     m_intakes.destroy();
-    m_combustionChambers.destroy();
     m_throttle.destroy();
 }
 

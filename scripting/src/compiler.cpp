@@ -63,6 +63,37 @@ void es_script::Compiler::initialize(std::vector<std::string> &paths)
     GetRules().initialize();
 }
 
+bool es_script::Compiler::compile_script(std::string const& script, const piranha::IrPath &root) {
+    bool successful = false;
+
+    piranha::IrCompilationUnit *unit = m_compiler->compile_script(script, root);
+    if (unit == nullptr)
+    {
+        std::cout << "Something went wrong\n";
+    }
+    else
+    {
+        const piranha::ErrorList *errors = m_compiler->getErrorList();
+        if (errors->getErrorCount() == 0)
+        {
+            unit->build(&m_program);
+
+            m_program.initialize();
+
+            successful = true;
+        }
+        else
+        {
+            for (int i = 0; i < errors->getErrorCount(); ++i)
+            {
+                printError(errors->getCompilationError(i), std::cout);
+            }
+        }
+    }
+
+    return successful;
+}
+
 bool es_script::Compiler::compile(const piranha::IrPath &path)
 {
     bool successful = false;

@@ -113,7 +113,7 @@ class Engine : public Part {
 
         virtual Simulator *createSimulator(Vehicle *vehicle, Transmission *transmission);
 
-    protected:
+    public:
         std::string m_name;
 
         Ptr<Crankshaft> m_crankshafts;
@@ -123,9 +123,9 @@ class Engine : public Part {
         Ptr<CylinderHead> m_heads;
         int m_cylinderBankCount;
 
-        Ptr<Piston> m_pistons;
-        Ptr<ConnectingRod> m_connectingRods;
-        Ptr<CombustionChamber> m_combustionChambers;
+        std::vector<Piston> m_pistons;
+        std::vector<ConnectingRod> m_connectingRods;
+        std::vector<CombustionChamber> m_combustionChambers;
         int m_cylinderCount;
 
         double m_starterTorque;

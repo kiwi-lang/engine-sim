@@ -108,7 +108,7 @@ class GasSystem {
         inline double heatCapacityRatio() const;
         inline Mix mix() const { return m_state.mix; }
 
-    protected:
+    public:
         State m_state;
 
         int m_degreesOfFreedom = 5;

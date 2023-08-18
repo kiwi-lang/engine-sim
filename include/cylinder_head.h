@@ -77,7 +77,7 @@ class CylinderHead : public Part {
         Ptr<Camshaft> getExhaustCamshaft();
         Ptr<Camshaft> getIntakeCamshaft();
 
-    protected:
+    public:
         Ptr<Cylinder> m_cylinders;
         Ptr<CylinderBank> m_bank;
         Ptr<Valvetrain> m_valvetrain;

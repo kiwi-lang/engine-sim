@@ -41,7 +41,7 @@ class IgnitionModule : public Part {
 
         bool m_enabled;
 
-    protected:
+    public:
         Ptr<SparkPlug> getPlug(int i);
 
         Ptr<Function> m_timingCurve;

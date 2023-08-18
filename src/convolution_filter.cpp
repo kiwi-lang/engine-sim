@@ -15,6 +15,8 @@ ConvolutionFilter::~ConvolutionFilter() {
 }
 
 void ConvolutionFilter::initialize(int samples) {
+    assert (samples > 0);
+    
     m_sampleCount = samples;
     m_shiftOffset = 0;
     m_shiftRegister.make(samples);
