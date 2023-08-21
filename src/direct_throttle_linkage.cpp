@@ -1,6 +1,6 @@
 #include "../include/direct_throttle_linkage.h"
 
-#include "../include/engine.h"
+#include "../include/part_engine.h"
 
 #include <cmath>
 

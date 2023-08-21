@@ -18,7 +18,7 @@ public:
     virtual void setSpeedControl(double s);
     virtual void update(double dt, Engine *engine);
 
-protected:
+public:
     double m_gamma;
     double m_throttlePosition;
 };

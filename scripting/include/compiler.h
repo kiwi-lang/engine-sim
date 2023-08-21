@@ -43,7 +43,11 @@ namespace es_script
         Output execute();
         void destroy();
 
+        void dumpErrors(std::function<void(std::string const&)> fun);
+
+
     private:
+        std::string dumpError(const piranha::CompilationError *err);
         void printError(const piranha::CompilationError *err, std::ostream &file) const;
 
     private:

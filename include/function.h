@@ -1,7 +1,7 @@
 #ifndef ATG_ENGINE_SIM_FUNCTION_H
 #define ATG_ENGINE_SIM_FUNCTION_H
 
-#include "gaussian_filter.h"
+#include "filter_gaussian.h"
 
 class Function {
     protected:

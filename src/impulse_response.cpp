@@ -35,6 +35,16 @@ const int16_t* ImpulseResponse::GetImpulseResponse(std::size_t& size) {
         memcpy(m_buffer, waveFile.GetBuffer(), m_size * sizeof(int16_t));
  
         waveFile.DestroyInternalBuffer();
+
+
+        // Clip the Impulse now
+        unsigned int clippedLength = 0;
+        for (unsigned int i = 0; i < m_size; ++i) {
+            if (std::abs(m_buffer[i]) > 100) {
+                clippedLength = i + 1;
+            }
+        }
+        m_size = clippedLength;
     }
 
     size = m_size;

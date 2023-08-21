@@ -1,13 +1,13 @@
 #ifndef ATG_ENGINE_SIM_ENGINE_SYNTHESIZER_H
 #define ATG_ENGINE_SIM_ENGINE_SYNTHESIZER_H
 
-#include "convolution_filter.h"
-#include "leveling_filter.h"
-#include "derivative_filter.h"
-#include "low_pass_filter.h"
-#include "jitter_filter.h"
+#include "filter_convolution.h"
+#include "filter_leveling.h"
+#include "filter_derivative.h"
+#include "filter_low_pass.h"
+#include "filter_jitter.h"
 #include "ring_buffer.h"
-#include "butterworth_low_pass_filter.h"
+#include "filter_butterworth_low_pass.h"
 
 #include <cinttypes>
 #include <thread>

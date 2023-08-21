@@ -3,7 +3,7 @@
 
 #include "part.h"
 
-#include "crankshaft.h"
+#include "part_crankshaft.h"
 
 
 class CylinderBank {

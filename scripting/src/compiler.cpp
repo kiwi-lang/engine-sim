@@ -64,69 +64,36 @@ void es_script::Compiler::initialize(std::vector<std::string> &paths)
 }
 
 bool es_script::Compiler::compile_script(std::string const& script, const piranha::IrPath &root) {
-    bool successful = false;
-
     piranha::IrCompilationUnit *unit = m_compiler->compile_script(script, root);
-    if (unit == nullptr)
-    {
-        std::cout << "Something went wrong\n";
-    }
-    else
-    {
-        const piranha::ErrorList *errors = m_compiler->getErrorList();
-        if (errors->getErrorCount() == 0)
-        {
-            unit->build(&m_program);
+    const piranha::ErrorList *errors = m_compiler->getErrorList();
 
-            m_program.initialize();
+    if (unit != nullptr && errors->getErrorCount() == 0)
+    {
+        unit->build(&m_program);
 
-            successful = true;
-        }
-        else
-        {
-            for (int i = 0; i < errors->getErrorCount(); ++i)
-            {
-                printError(errors->getCompilationError(i), std::cout);
-            }
-        }
+        m_program.initialize();
+
+        return true;
     }
 
-    return successful;
+    return false;
 }
 
 bool es_script::Compiler::compile(const piranha::IrPath &path)
 {
-    bool successful = false;
-
-    // std::ofstream file("error_log.log", std::ios::out);
     piranha::IrCompilationUnit *unit = m_compiler->compile(path);
-    if (unit == nullptr)
-    {
-        std::cout << "Can't find file: " << path.toString() << "\n";
-    }
-    else
-    {
-        const piranha::ErrorList *errors = m_compiler->getErrorList();
-        if (errors->getErrorCount() == 0)
-        {
-            unit->build(&m_program);
+    const piranha::ErrorList *errors = m_compiler->getErrorList();
 
-            m_program.initialize();
+    if (unit != nullptr && errors->getErrorCount() == 0)
+    {
+        unit->build(&m_program);
 
-            successful = true;
-        }
-        else
-        {
-            for (int i = 0; i < errors->getErrorCount(); ++i)
-            {
-                printError(errors->getCompilationError(i), std::cout);
-            }
-        }
+        m_program.initialize();
+
+        return true;
     }
 
-    // file.close();
-
-    return successful;
+    return false;
 }
 
 es_script::Compiler::Output es_script::Compiler::execute()
@@ -149,6 +116,21 @@ void es_script::Compiler::destroy()
     delete m_compiler;
     m_compiler = nullptr;
 }
+
+void es_script::Compiler::dumpErrors(std::function<void(std::string const&)> fun) {
+    const piranha::ErrorList *errors = m_compiler->getErrorList();
+
+    for (int i = 0; i < errors->getErrorCount(); ++i)
+    {
+        fun(dumpError(errors->getCompilationError(i)));
+    }
+}
+
+ std::string es_script::Compiler::dumpError(const piranha::CompilationError *err) {
+    std::stringstream ss;
+    printError(err, ss);
+    return ss.str();
+ }
 
 void es_script::Compiler::printError(
     const piranha::CompilationError *err,

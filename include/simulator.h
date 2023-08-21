@@ -1,17 +1,16 @@
 #ifndef ATG_ENGINE_SIM_SIMULATOR_H
 #define ATG_ENGINE_SIM_SIMULATOR_H
 
-#include "engine.h"
+#include "part_engine.h"
 #include "transmission.h"
 #include "vehicle.h"
 #include "synthesizer.h"
 #include "dynamometer.h"
 #include "starter_motor.h"
-#include "derivative_filter.h"
+#include "filter_derivative.h"
 #include "vehicle_drag_constraint.h"
-#include "delay_filter.h"
+#include "filter_delay.h"
 #include "brake.h"
-#include "engine.h"
 
 #include <chrono>
 

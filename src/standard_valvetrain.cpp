@@ -1,6 +1,6 @@
 #include "../include/standard_valvetrain.h"
 
-#include "../include/camshaft.h"
+#include "../include/part_camshaft.h"
 
 StandardValvetrain::StandardValvetrain() {
     m_intakeCamshaft = nullptr;

@@ -3,9 +3,9 @@
 
 #include "scs.h"
 
-#include "piston.h"
+#include "part_piston.h"
 #include "gas_system.h"
-#include "cylinder_head.h"
+#include "part_cylinder_head.h"
 #include "units.h"
 #include "fuel.h"
 

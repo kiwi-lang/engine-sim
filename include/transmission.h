@@ -2,7 +2,7 @@
 #define ATG_ENGINE_SIM_TRANSMISSION_H
 
 #include "vehicle.h"
-#include "engine.h"
+#include "part_engine.h"
 #include "scs.h"
 
 class Transmission {

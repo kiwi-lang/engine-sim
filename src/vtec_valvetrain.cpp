@@ -1,6 +1,6 @@
 #include "../include/vtec_valvetrain.h"
 
-#include "../include/engine.h"
+#include "../include/part_engine.h"
 
 VtecValvetrain::VtecValvetrain() {
     m_intakeCamshaft = nullptr;

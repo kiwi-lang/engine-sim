@@ -2,12 +2,12 @@
 
 #include "../include/constants.h"
 #include "../include/units.h"
-#include "../include/piston.h"
-#include "../include/connecting_rod.h"
+#include "../include/part_piston.h"
+#include "../include/part_connecting_rod.h"
 #include "../include/utilities.h"
-#include "../include/exhaust_system.h"
+#include "../include/part_exhaust_system.h"
 #include "../include/cylinder_bank.h"
-#include "../include/engine.h"
+#include "../include/part_engine.h"
 
 #include <cmath>
 

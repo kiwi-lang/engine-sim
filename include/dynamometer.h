@@ -3,7 +3,7 @@
 
 #include "scs.h"
 
-#include "crankshaft.h"
+#include "part_crankshaft.h"
 
 class Dynamometer : public atg_scs::Constraint {
     public:

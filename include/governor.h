@@ -3,9 +3,11 @@
 
 #include "throttle.h"
 
-class Governor : public Throttle {
-public:
-    struct Parameters {
+class Governor: public Throttle
+{
+    public:
+    struct Parameters
+    {
         double minSpeed;
         double maxSpeed;
         double minVelocity;
@@ -15,7 +17,7 @@ public:
         double gamma;
     };
 
-public:
+    public:
     Governor();
     virtual ~Governor();
 
@@ -24,7 +26,7 @@ public:
     virtual void setSpeedControl(double s);
     virtual void update(double dt, Engine *engine);
 
-protected:
+    public:
     double m_minSpeed;
     double m_maxSpeed;
     double m_minVelocity;

@@ -9,7 +9,7 @@
 #undef min
 #undef max
 
-#define RANDOM_MAGIC_NUMBER 2048
+#define RANDOM_MAGIC_NUMBER 2000
 
 Synthesizer::Synthesizer() {
     m_inputChannels = nullptr;
